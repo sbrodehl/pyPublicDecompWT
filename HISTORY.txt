@@ -1,0 +1,66 @@
+Wavelet versions history
+2.06	Date: 12-07-2011
+	Company: Eumetsat
+	Notes:
+		Modification of the source code to support a newer version of gcc compiler.
+			gcc 4.4.x and previous versions are now supported.
+	
+2.05	Date: 24-06-2009
+	Company: Eumetsat
+	Notes:
+		Modification of the source code to prevent vector pointer on m_Tmp from accessing
+			outside vector boundaries,which was causing null exceptions depending on the 
+			implementation of the standard library.
+			Fix kindly provided by Andre
+		Modified files with respect to the previous
+			CWBlock.cpp
+	
+2.04
+	Date: 27-08-2008
+	Company: Eumetsat
+	Notes:
+		Modification of the source code to support a newer version of gcc compiler.
+			gcc 4.2.x and previous versions are now supported.
+			Upgrade fixes kindly provided by Mateusz Loskot.
+		Modified files with repect to previous version:
+			CImage.h, CJBlock.h, CJBlock.cpp
+			
+
+2.03
+	Date: 17-03-2008
+	Company: Eumetsat
+	Notes:
+		Anomaly correction: Time stamp (i.e. Header Type #5 at offset 0x8c) on decompressed
+			 files does not match time stamp of the original compressed files for UNIX
+			 platforms. 
+		Reunifications of 32 and 64 bits Makefiles into just one Makefile. Number of Kernel
+			 bits can be passed to the Makefile or is picked up automatically
+			 for Solaris and Unix platforms.
+		Change of test data and its structure. Original uncompressed data and their compressed
+			 counterparts are provided. The check is performed comparing the original
+			 uncompressed data with the decompressed data obtained from running the
+			 xRITDecompress tool.
+		
+2.02
+	Date: 04-06-2007
+	Company: Eumetsat
+	Notes:
+		Works on both little and big endian architectures.
+		Compiles on cygwin.
+		Compiles on Eclipse.
+		Works on 32 bits and 64 bits machines as well as mixed architectures
+		Can be asked for the version number on commandline.
+		
+2.01
+	Date: 17-06-2003
+	Company: Eumetsat
+	Notes:
+		Works only on big endian architectures (e.g.: Solaris machines).
+2.00
+	Date: 05-06-2003
+	Company: VCS
+	Notes:
+		Works only on little endian architectures (e.g.: Intel desktop machines).
+1.00
+	Date: 2001
+	Company: VCS
