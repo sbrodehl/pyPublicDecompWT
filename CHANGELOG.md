@@ -1,6 +1,11 @@
 # PublicDecompWT history
 The versioning of PublicDecompWT follows [Semantic Versioning](https://semver.org/) from version 2.06.
 
+## [2.7.0] - 2019-08-09
+### Changed
+- Update README and accompanying metadata
+- Release under Apache v2 license
+
 ## [2.06] - 2011-07-12
 ### Added
 - Support for `gcc` 4.4.x and previous versions.
