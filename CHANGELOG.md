@@ -1,5 +1,5 @@
 # PublicDecompWT history
-The versioning of PublicDecompWT follows [Semantic Versioning](https://semver.org/).
+The versioning of PublicDecompWT follows [Semantic Versioning](https://semver.org/) from version 2.06.
 
 ## [2.06] - 2011-07-12
 ### Added
