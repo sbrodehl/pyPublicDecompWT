@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-/*------------------------------------------------------------------------------------------
-* Columbus Control Center
-*
-* Data Services Subsystem DaSS
-*
-* This software is developed by VCS AG under contract for DLR, contract no 6-057-2272.
-*
-* The copyright in this document is vested VCS Nachrichtentechnik GmbH. This document may only be
-* reproduced in whole or in part, or stored in a retrieval system, or transmitted in any form, or by any
-* means electronic, mechanical, photocopying or otherwise, either with the prior permission of VCS AG
-* or in accordance with the terms of DLR Contract no 6-057-2272.
-*
-*
---------------------------------------------------------------------------------------------
 ****  DaSS MODULE HEADER   ***
 
 TYPE:			// to be added
