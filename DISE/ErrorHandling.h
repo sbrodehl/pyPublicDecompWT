@@ -14,26 +14,6 @@
  * limitations under the License.
  */
 
-****  DaSS MODULE HEADER   ***
-
-TYPE:			// to be added
-
-PURPOSE:		// to be added
-
-FUNCTION:		// to be added
-
-INTERFACES:	// to be added
-
-RESOURCES:		// to be added
-
-PROCESSING:	// to be added
-
-DATA:			// to be added
-
-LOGIC:		// to be added
-
-****  END MODULE HEADER   ***
-------------------------------------------------------------------------------------------*/
 
 #ifndef _ERRORHANDLING_H_
 #define _ERRORHANDLING_H_
