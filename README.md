@@ -5,7 +5,7 @@ Note that it only decompresses compressed XRIT files.
 It includes a decoder for JPEG, WT and T4.
 
 # Build instructions
-## Linux and Solaris
+## Linux, Solaris and Windows with Cygwin
 ### Required software
 - GNU-GCC (`g++`, tested with version 4.2.x or previous version 3.x)
 - GNU-make (`make`, tested with version 3.79.1)
@@ -15,18 +15,6 @@ It includes a decoder for JPEG, WT and T4.
 ### Instructions
 Navigate into `xRITDecompress` and call `make`.
 The compiled image will be stored in the `xRITDecompress` directory (image name `xRITDecompress`).
-
-## Windows
-### Required software
-- Eclipse (tested with 3.2.2) or CygWin
-
-### Eclipse Instructions
-Select as workspace the folder `Extras`. The project `Eclipse_project` will be loaded automatically.
-It can be rebuilt or executed directly choosing the executable placed in the folder `Release`.
-Notice that one image should be used as argument.
-
-### CygWin Instructions
-Build the software as described for Linux and Solaris.
 
 # Usage
 You can specify:
