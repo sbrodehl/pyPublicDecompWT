@@ -56,7 +56,7 @@ LOGIC:
 #include "CxRITFileDecompressed.h"	// DISE
 
 
-const char* VERSION_NUMBER="2.04";
+const char* VERSION_NUMBER="2.7.2";
 
 // Description:	Tells the correct command line syntax.
 // Returns:		Nothing.

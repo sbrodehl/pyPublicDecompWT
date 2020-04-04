@@ -3,7 +3,7 @@ description: Decompress XRIT files
 license_spdx: Apache-2.0	
 copyright: EUMETSAT
 
-version: 2.7.1
+version: 2.7.2
 home_url: http://www.eumetsat.int/website/home/Data/DataDelivery/SupportSoftwareandTools/index.html
 
 # Whenever the EUMETSAT copyright and license is not specified inside 
