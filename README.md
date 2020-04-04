@@ -1,4 +1,7 @@
 # PublicDecompWT
+
+(Note: Fork of [PublicDecompWT@eumetsat.int](https://gitlab.eumetsat.int/open-source/PublicDecompWT))
+
 This repository contains the source code for the PublicDecompWT tool.
 The tool can be build in Windows, Linux and Solaris.
 Note that it only decompresses compressed XRIT files.
