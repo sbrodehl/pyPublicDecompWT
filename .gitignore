@@ -1,6 +1,4 @@
-*.o
-*.a
-### C template
+### C / C++ template
 # Prerequisites
 *.d
 
@@ -9,6 +7,7 @@
 *.ko
 *.obj
 *.elf
+*.slo
 
 # Linker output
 *.ilk
@@ -20,10 +19,11 @@
 *.pch
 
 # Libraries
-*.lib
 *.a
+*.lib
 *.la
 *.lo
+*.lai
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -54,6 +54,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Fortran module files
+*.mod
+*.smod
+
 ### CMake template
 CMakeLists.txt.user
 CMakeCache.txt
@@ -66,38 +70,3 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
-
-### C++ template
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
