@@ -59,6 +59,7 @@ dkms.conf
 *.smod
 
 ### CMake template
+cmake-build-*
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
