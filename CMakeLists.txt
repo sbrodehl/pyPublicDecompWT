@@ -7,9 +7,10 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # a common place where CMake should put all executable / library files
-# set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/dist/bin)
-# set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/dist/lib)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/dist/bin)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/dist/lib)
 
 find_package(Threads REQUIRED)
 
