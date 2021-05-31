@@ -17,5 +17,5 @@ set(SOURCE_FILES
         UTCTime.cpp
         )
 
-add_library(${LIBNAME} STATIC ${SOURCE_FILES})
+add_library(${LIBNAME} SHARED ${SOURCE_FILES})
 target_include_directories(${LIBNAME} PUBLIC .)
