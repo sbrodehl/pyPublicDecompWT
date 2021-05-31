@@ -2,8 +2,9 @@ import ctypes
 from pathlib import Path
 
 if __name__ == '__main__':
-    lib_path = Path("../dist/lib/libxRIT.so")
-    libxRIT = ctypes.CDLL(str(lib_path.resolve().absolute()))
+    lib_path = Path("../dist/lib/libxRIT.so").resolve().absolute()
+    assert lib_path.exists()
+    libxRIT = ctypes.CDLL(str(lib_path))
 
     class xRIT(object):
         def __init__(self, data):
