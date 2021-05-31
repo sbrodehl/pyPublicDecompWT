@@ -17,6 +17,9 @@ if __name__ == '__main__':
             _LIBxRIT.xRITWrapper_getSpectralChannelID.argtypes = [ctypes.c_void_p]
             _LIBxRIT.xRITWrapper_getSpectralChannelID.restype = ctypes.c_int
 
+            _LIBxRIT.xRITWrapper_getFileTypeCode.argtypes = [ctypes.c_void_p]
+            _LIBxRIT.xRITWrapper_getFileTypeCode.restype = ctypes.c_int
+
             _LIBxRIT.xRITWrapper_getSegmentSeqNo.argtypes = [ctypes.c_void_p]
             _LIBxRIT.xRITWrapper_getSegmentSeqNo.restype = ctypes.c_int
 
@@ -48,6 +51,9 @@ if __name__ == '__main__':
 
         def getTotalHeaderLength(self):
             return _LIBxRIT.xRITWrapper_getTotalHeaderLength(self.xRITWrapper)
+
+        def getFileTypeCode(self):
+            return _LIBxRIT.xRITWrapper_getFileTypeCode(self.xRITWrapper)
 
         def getSpectralChannelID(self):
             return _LIBxRIT.xRITWrapper_getSpectralChannelID(self.xRITWrapper)

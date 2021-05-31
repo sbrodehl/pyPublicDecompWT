@@ -22,6 +22,7 @@ public:
     unsigned long long getTotalHeaderLength() const;
     int getSpectralChannelID() const;
     int getSegmentSeqNo() const;
+    int getFileTypeCode() const;
     void getTimeStamp(char* buf);
 private:
     std::ostringstream output_buffer;
@@ -29,6 +30,7 @@ private:
     unsigned long long totalHeaderLength = 0;
     int spectralChannelID = 0;
     int segmentSeqNo = -1;
+    int fileTypeCode = -1;
     std::string utctime_format;
 };
 
@@ -46,6 +48,7 @@ xRITWrapper::xRITWrapper(char *in_buffer, int in_bytes) {
     spectralChannelID = decompressedFile.GetSpectralChannelID().m_SC_CHAN_ID;
     segmentSeqNo = decompressedFile.GetSegmentSeqNo();
     totalHeaderLength = decompressedFile.GetTotalHeaderLength();
+    fileTypeCode = decompressedFile.GetFileTypeCode();
     auto utctime(const_cast<SYSTIME &>(decompressedFile.GetTimeStamp()));
     utctime_format = utctime.Format("%Y%m%d%H%M%S");
     decompressedFile.Write(output_buffer);
@@ -77,6 +80,10 @@ void xRITWrapper::getTimeStamp(char *buf) {
     std::memcpy(buf, utctime_format.c_str(), 14);
 }
 
+int xRITWrapper::getFileTypeCode() const {
+    return fileTypeCode;
+}
+
 
 // Define C functions for the C++ class - as ctypes can only talk to C...
 EXTERN_DLL_EXPORT {
@@ -85,6 +92,9 @@ EXTERN_DLL_EXPORT {
     }
     int xRITWrapper_getSpectralChannelID(xRITWrapper* foo) {
         return foo->getSpectralChannelID();
+    }
+    int xRITWrapper_getFileTypeCode(xRITWrapper* foo) {
+        return foo->getFileTypeCode();
     }
     int xRITWrapper_getSegmentSeqNo(xRITWrapper* foo) {
         return foo->getSegmentSeqNo();
