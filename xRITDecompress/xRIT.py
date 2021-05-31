@@ -10,12 +10,12 @@ if __name__ == '__main__':
         def __init__(self, data):
             libxRIT.xRITWrapper_Constructor.argtypes = (ctypes.POINTER(ctypes.c_char), ctypes.c_int)
             libxRIT.xRITWrapper_Constructor.restype = ctypes.c_void_p
-
             libxRIT.xRITWrapper_getOutputLength.argtypes = [ctypes.c_void_p]
             libxRIT.xRITWrapper_getOutputLength.restype = ctypes.c_int
-
             libxRIT.xRITWrapper_write.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
             libxRIT.xRITWrapper_write.restype = ctypes.c_void_p
+            libxRIT.xRITWrapper_getAnnotationText.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+            libxRIT.xRITWrapper_getAnnotationText.restype = ctypes.c_void_p
 
             num_bytes = len(data)
             array_type = (ctypes.c_char * num_bytes)(*data)
@@ -24,6 +24,12 @@ if __name__ == '__main__':
         def output(self):
             _num_bytes = libxRIT.xRITWrapper_getOutputLength(self.xRITWrapper)
             _string_buffer = ctypes.create_string_buffer(_num_bytes + 1)  # account for NULL terminator
+            _pointer = ctypes.c_char_p(ctypes.addressof(_string_buffer))
+            libxRIT.xRITWrapper_write(self.xRITWrapper, _pointer)
+            return _string_buffer.raw
+
+        def getAnnotationText(self):
+            _string_buffer = ctypes.create_string_buffer(61 + 1)  # account for NULL terminator
             _pointer = ctypes.c_char_p(ctypes.addressof(_string_buffer))
             libxRIT.xRITWrapper_write(self.xRITWrapper, _pointer)
             return _string_buffer.raw
