@@ -594,7 +594,7 @@ public:
 	long					GetLOFF()						const { return m_LOFF;					}
 	const std::string&		GetDataDefinitionBlock()		const { return m_DataDefinitionBlock;	}
 	const DISE::CxRITAnnotation&	GetAnnotation()			const { return m_Annotation;			}
-	const SYSTIME&	GetTimeStamp()					const { return m_TimeStamp;				}
+	const SYSTIME&	GetTimeStamp()					        const { return m_TimeStamp;				}
 	const std::string&		GetAncillaryText()				const { return m_AncillaryText;			}
 	unsigned char			GetKeyNumber()					const { return m_KeyNumber;				}
 	unsigned __int64		GetSeed()						const { return m_Seed;					}
