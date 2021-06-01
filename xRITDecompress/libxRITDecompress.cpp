@@ -24,6 +24,7 @@ public:
     int getSegmentSeqNo() const;
     int getFileTypeCode() const;
     void getTimeStamp(char* buf);
+    void getAnnotationText(char* text);
 private:
     std::ostringstream output_buffer;
     unsigned long long output_length = 0;
@@ -31,6 +32,7 @@ private:
     int spectralChannelID = 0;
     int segmentSeqNo = -1;
     int fileTypeCode = -1;
+    std::string file_annotation;
     std::string utctime_format;
 };
 
@@ -51,9 +53,14 @@ xRITWrapper::xRITWrapper(char *in_buffer, int in_bytes) {
     fileTypeCode = decompressedFile.GetFileTypeCode();
     auto utctime(const_cast<SYSTIME &>(decompressedFile.GetTimeStamp()));
     utctime_format = utctime.Format("%Y%m%d%H%M%S");
+    file_annotation = decompressedFile.GetAnnotation().GetText();
     decompressedFile.Write(output_buffer);
     output_buffer.seekp(0, std::ios::end);
     output_length = output_buffer.tellp();
+}
+
+void xRITWrapper::getAnnotationText(char *text) {
+    std::memcpy(text, file_annotation.c_str(), file_annotation.length());
 }
 
 unsigned long long xRITWrapper::getOutputLength() const {
@@ -110,5 +117,8 @@ EXTERN_DLL_EXPORT {
     }
     void xRITWrapper_getTimeStamp(xRITWrapper* foo, char* buf) {
         return foo->getTimeStamp(buf);
+    }
+    void xRITWrapper_getAnnotationText(xRITWrapper* foo, char* text) {
+        return foo->getAnnotationText(text);
     }
 }
