@@ -18,17 +18,14 @@ requirements:
     - vc  # [win]
     - vs2015_runtime=14.16  # [win]
   host:
-          #  - m2-patch  # [win]
-          #    - python=3.6
-          #    - gdal=={{ gdal_version }}
+  
   run:
-          #    - python=3.6
-          #    - gdal=={{ gdal_version }}
 
 about:
   home: http://www.eumetsat.int/
   license: Apache License 2.0
   license_family: APACHE
-  license_file: LICENSE
+  license_file: {{SRC_DIR}}/LICENSE
   summary: The PublicDecompWT tool can be build in Windows, Linux and Solaris. Note that it only decompresses compressed XRIT files. It includes a decoder for JPEG, WT and T4. 
+  description: The PublicDecompWT tool source code can be build in Windows, Linux and Solaris; however the conda package public-decomp-wt is only for Linux. Note that it only decompresses compressed XRIT files. It includes a decoder for JPEG, WT and T4.
 
