@@ -41,7 +41,7 @@ depend:
 # Test commands and variables
 
 Base_Dir = $(shell pwd)
-Data_Dir = $(shell cd ../../Data && pwd)
+Data_Dir = $(shell cd ../test-data && pwd)
 CompTargets=$(wildcard $(Data_Dir)/compressed_ref/*-C_)
 DecompTargets=$(subst compressed_ref,decompressed,$(subst -C_,-__,$(CompTargets)))
 	
