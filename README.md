@@ -5,16 +5,26 @@ Note that it only decompresses compressed XRIT files.
 It includes a decoder for JPEG, WT and T4.
 
 # Build instructions
-## Linux, Solaris and Windows with Cygwin
+## Linux, Solaris and Windows with Cygwin or Native Tools
 ### Required software
 - GNU-GCC (`g++`, tested with version 4.2.x or previous version 3.x)
 - GNU-make (`make`, tested with version 3.79.1)
 - `ar`
 - `ranlib`
+- `nmake` as part of the Native Tools for VS
 
 ### Instructions
 Navigate into `xRITDecompress` and call `make`.
 The compiled image will be stored in the `xRITDecompress` directory (image name `xRITDecompress`).
+
+### Instructions, Windows with Native Tools
+- Open the Native Tools Command Prompt for VS
+- Navigate into DISE folder and run nmake /f makefile.vc
+- Navigate into COMP\Src folder and run nmake /f makefile.vc
+- Navigate into COMP\JPEG\Src folder and run nmake /f makefile.vc
+- Navigate into COMP\WT\Src folder and run nmake /f makefile.vc
+- Navigate into COMP\T4\Src folder and run nmake /f makefile.vc
+- Navigate into xRITDecompress folder and run nmake /f makefile.vc exe
 
 # Usage
 You can specify:

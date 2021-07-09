@@ -476,12 +476,11 @@ const
 
 				case e_ImageDataFunction       :
 					{
-						/*
+#ifdef WIN32
 						for (unsigned int i = 0; i < m_DataDefinitionBlock.size(); ++i)
 							i_Stream << m_DataDefinitionBlock[i];
-						*/
-#ifdef WIN32
-						i_Stream.write(m_DataDefinitionBlock.begin(),m_DataDefinitionBlock.size());
+
+						/*i_Stream.write(m_DataDefinitionBlock.begin(),m_DataDefinitionBlock.size());*/
 #else
 						i_Stream.write(m_DataDefinitionBlock.begin().base(),m_DataDefinitionBlock.size());
 #endif

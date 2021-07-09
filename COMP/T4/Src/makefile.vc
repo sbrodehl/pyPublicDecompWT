@@ -1,0 +1,13 @@
+
+OBJ	= CBitBuffer.obj CompressT4.obj T4Coder.obj T4Codes.obj T4Decoder.obj
+
+EXTRAFLAGS = /EHsc -I..\Inc -I..\..\..\DISE -I..\..\Inc -D"WIN32" 
+CFLAGS =  $(EXTRAFLAGS)
+CPPFLAGS = $(CFLAGS)
+
+default:	$(OBJ)
+	copy *.obj ..\..\..\xRITDecompress
+
+clean:
+	-del *.obj
+

@@ -1,0 +1,13 @@
+
+OBJ	=	CACCoder.obj CACDecoder.obj CACModel.obj CVLCCoder.obj CVLCDecoder.obj CWBlock.obj CWTCoder.obj CWTDecoder.obj CompressWT.obj
+
+EXTRAFLAGS = /EHsc -I..\Inc -I..\..\Inc -I..\..\..\DISE -D"WIN32" -I .
+CFLAGS = $(EXTRAFLAGS)
+CPPFLAGS = $(CFLAGS) -DNOMINMAX
+
+default:	$(OBJ)
+	copy *.obj ..\..\..\xRITDecompress
+
+clean:
+	-del *.obj
+

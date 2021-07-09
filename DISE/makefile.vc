@@ -1,0 +1,12 @@
+
+OBJ	=	CxRITFile.obj CxRITFileHeaderRecords.obj CxRITAnnotation.obj ErrorHandling.obj
+
+EXTRAFLAGS = /EHsc -D"WIN32"
+CFLAGS  = $(EXTRAFLAGS)
+CPPFLAGS = $(CFLAGS) -DNOMINMAX
+
+default:	$(OBJ)
+	copy *.obj ..\xRITDecompress
+
+clean:
+	-del *.obj

@@ -1,0 +1,14 @@
+
+OBJ	= xRITDecompress.obj
+
+EXTRAFLAGS = /EHsc -I..\DISE -I..\COMP\Inc -I..\COMP\JPEG\Inc -I..\COMP\T4\Inc -I..\COMP\WT\Inc -D"WIN32" 
+CFLAGS =  $(EXTRAFLAGS)
+CPPFLAGS = $(CFLAGS)
+
+default:	$(OBJ)
+
+clean:
+	-del *.obj
+
+exe: default
+	link /MACHINE:x64  *.obj /OUT:xRITDecompress.exe
