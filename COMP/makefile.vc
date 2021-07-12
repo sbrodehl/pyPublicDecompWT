@@ -1,0 +1,43 @@
+
+_src: _jpeg
+    cd Src
+    nmake /f makefile.vc
+    cd ..
+
+_jpeg: _wt
+    cd JPEG\Src
+    nmake /f makefile.vc
+    cd ..\..
+
+_wt: _t4
+    cd WT\Src
+    nmake /f makefile.vc
+    cd ..\..
+
+_t4: 
+    cd T4\Src
+    nmake /f makefile.vc
+    cd ..\..
+
+clean_src: clean_jpeg
+    cd Src
+    nmake /f makefile.vc clean
+    cd ..
+
+clean_jpeg: clean_wt
+    cd JPEG\Src
+    nmake /f makefile.vc clean
+    cd ..\..
+
+clean_wt: clean_t4
+    cd WT\Src
+    nmake /f makefile.vc clean
+    cd ..\..
+
+clean_t4: 
+    cd T4\Src
+    nmake /f makefile.vc clean
+    cd ..\..
+
+clean: clean_src
+	-del *.obj

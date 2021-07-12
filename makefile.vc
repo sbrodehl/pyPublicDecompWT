@@ -1,0 +1,33 @@
+
+_xRITDecompress: _comp
+    cd xRITDecompress 
+    nmake /f makefile.vc exe
+    cd ..
+
+_comp: _dise
+    cd COMP
+    nmake /f makefile.vc
+    cd ..
+
+_dise:
+    cd DISE
+    nmake /f makefile.vc
+    cd ..
+
+clean_dise:
+    cd DISE
+    nmake /f makefile.vc clean
+    cd ..
+  
+clean_comp: clean_dise
+    cd COMP
+    nmake /f makefile.vc clean
+    cd ..
+
+clean_xRITDecompress: clean_comp
+    cd xRITDecompress 
+    nmake /f makefile.vc clean
+    cd ..
+
+clean: clean_xRITDecompress
+	-del *.obj

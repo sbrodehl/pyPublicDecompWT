@@ -17,14 +17,11 @@ It includes a decoder for JPEG, WT and T4.
 Navigate into `xRITDecompress` and call `make`.
 The compiled image will be stored in the `xRITDecompress` directory (image name `xRITDecompress`).
 
-### Instructions, Windows with Native Tools
-- Open the Native Tools Command Prompt for VS
-- Navigate into DISE folder and run nmake /f makefile.vc
-- Navigate into COMP\Src folder and run nmake /f makefile.vc
-- Navigate into COMP\JPEG\Src folder and run nmake /f makefile.vc
-- Navigate into COMP\WT\Src folder and run nmake /f makefile.vc
-- Navigate into COMP\T4\Src folder and run nmake /f makefile.vc
-- Navigate into xRITDecompress folder and run nmake /f makefile.vc exe
+### Instructions for Windows with Native Tools for VS
+- Open the Native Tools Command Prompt for VS (x86 or x64, the output executable format will be set accordingly)
+- Navigate into PublicDecompWT folder and run "nmake /f makefile.vc". The executable file will be in the xRITDecompress folder.
+- To clean, navigate into PublicDecompWT folder and run "nmake /f makefile.vc clean"
+The procedure has been tested with Visual Studio Community 2019
 
 # Usage
 You can specify:
