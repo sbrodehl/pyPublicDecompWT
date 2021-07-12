@@ -9,6 +9,7 @@ default:	$(OBJ)
 
 clean:
 	-del *.obj
+	-del *.exe
 
 exe: default
-	link /MACHINE:x64  *.obj /OUT:xRITDecompress.exe
+	link /MACHINE:x86  *.obj /OUT:xRITDecompress.exe
