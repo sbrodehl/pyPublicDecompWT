@@ -1,13 +1,12 @@
-
 package:
   name: public-decomp-wt 
-  version: 0.1
+  version: 2.7.2
 
 source:
   - path: ../
 
 build:
-  number: 2
+  number: 1
 
 requirements:
   build:
