@@ -17,8 +17,6 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
-#define WIN32 1
-
 #ifdef WIN32
 #pragma message("WINDOWS BUILD")
 #include "MSGTime.h"
