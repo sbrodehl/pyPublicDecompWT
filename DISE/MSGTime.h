@@ -229,6 +229,7 @@ namespace Util
 
     		// Member functions.
 		public:
+
 			// Description
 			//		Constructor
 			//		This is aso the default constructor.

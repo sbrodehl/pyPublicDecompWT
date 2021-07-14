@@ -55,6 +55,7 @@ LOGIC:
       
 #include <stdarg.h>
 #include <string>
+#include <iostream>
 #include "ErrorHandling.h"
 #include "Types.h"
 
