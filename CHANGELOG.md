@@ -2,6 +2,11 @@
 The versioning of PublicDecompWT follows [Semantic Versioning](https://semver.org/) from version 2.06.
 This changelog uses [keep a changelog](https://keepachangelog.com/en/1.0.0/) as its template.
 
+## [2.7.3] - 2021-07-14
+### Changed
+- Support for build with Native Tools for VS. Added makefile and fixed an issue that prevented
+the binary compiled in windows to generate uncompressed files.
+
 ## [2.7.2] - 2019-12-17
 ### Fixed
 - Bug in headers preventing compilation

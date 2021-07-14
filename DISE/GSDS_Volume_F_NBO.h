@@ -850,8 +850,12 @@ public:
 
 	TIME_CDS_SHORT(SYSTIME i_)
 	{
-		//SYSTIME     refTime(1958, 1, 1);
-		SYSTIME		refTime(0, 0, 0, 1, 1, 1958);
+
+#ifdef WIN32
+		SYSTIME refTime(1958, 1, 1, 0, 0, 0, 0);
+#else
+		SYSTIME	refTime(0, 0, 0, 1, 1, 1958);
+#endif
 		SYSTIMESPAN tempSpan = i_ - refTime;
 #ifdef WIN32
 		m_Day                		= static_cast<unsigned short>(tempSpan.GetSpanInMilliseconds() / (1000*60*60*24));
@@ -865,8 +869,11 @@ public:
 
 	TIME_CDS_SHORT& operator=(SYSTIME i_)
 	{
-		//SYSTIME     refTime(1958, 1, 1);
-		SYSTIME		refTime(0, 0, 0, 1, 1, 1958);
+#ifdef WIN32
+		SYSTIME refTime(1958, 1, 1, 0, 0, 0, 0);
+#else
+		SYSTIME	refTime(0, 0, 0, 1, 1, 1958);
+#endif
 		SYSTIMESPAN tempSpan = i_ - refTime;
 #ifdef WIN32
 		m_Day               = static_cast<unsigned short>(tempSpan.GetSpanInMilliseconds() / (1000*60*60*24));
@@ -881,8 +888,11 @@ public:
 
 	SYSTIME CUTCTime() const
 	{
-		//SYSTIME		tempTime(1958, 1, 1);
+#ifdef WIN32
+		SYSTIME 	tempTime(1958, 1, 1, 0, 0, 0, 0);
+#else
 		SYSTIME		tempTime(0, 0, 0, 1, 1, 1958);
+#endif
 		unsigned short		tempDay          = m_Day;
 		unsigned long		tempMilliseconds = m_MillisecondsOfDay;
 		SYSTIMESPAN	tempSpan(tempDay*SYSTIMESPAN::Day() + tempMilliseconds*SYSTIMESPAN::Millisecond());
