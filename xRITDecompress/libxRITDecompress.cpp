@@ -99,7 +99,7 @@ EXTERN_DLL_EXPORT {
     }
     void xRITWrapper_Destructor(xRITWrapper* foo){
         delete foo;
-        foo = NULL;
+        foo = nullptr;
     }
     int xRITWrapper_getSpectralChannelID(xRITWrapper* foo) {
         return foo->getSpectralChannelID();
