@@ -97,6 +97,10 @@ EXTERN_DLL_EXPORT {
     xRITWrapper* xRITWrapper_Constructor(char* in_buffer, int in_bytes) {
         return new xRITWrapper(in_buffer, in_bytes);
     }
+    void xRITWrapper_Destructor(xRITWrapper* foo){
+        delete foo;
+        foo = NULL;
+    }
     int xRITWrapper_getSpectralChannelID(xRITWrapper* foo) {
         return foo->getSpectralChannelID();
     }
