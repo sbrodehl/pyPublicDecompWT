@@ -32,9 +32,15 @@ if __name__ == '__main__':
             _LIBxRIT.xRITWrapper_getTimeStamp.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
             _LIBxRIT.xRITWrapper_getTimeStamp.restype = ctypes.c_void_p
 
+            _LIBxRIT.xRITWrapper_Destructor.argtypes = [ctypes.c_void_p]
+            _LIBxRIT.xRITWrapper_Destructor.restype = ctypes.c_void_p
+
             num_bytes = len(data)
             array_type = (ctypes.c_char * num_bytes)(*data)
             self.xRITWrapper = _LIBxRIT.xRITWrapper_Constructor(array_type, ctypes.c_int(num_bytes))
+
+        def __del__(self):
+            _LIBxRIT.xRITWrapper_Destructor(self.xRITWrapper)
 
         def output(self):
             _num_bytes = _LIBxRIT.xRITWrapper_getOutputLength(self.xRITWrapper)
