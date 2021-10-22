@@ -44,3 +44,7 @@ clean_xRITDecompress: clean_comp
 
 clean: clean_xRITDecompress
 	-del *.obj
+
+install: _xRITDecompress
+	mkdir $(DEST_DIR)\Scripts
+	copy xRITDecompress\xRITDecompress.exe $(DEST_DIR)\Scripts\
