@@ -2,6 +2,13 @@
 The versioning of PublicDecompWT follows [Semantic Versioning](https://semver.org/) from version 2.06.
 This changelog uses [keep a changelog](https://keepachangelog.com/en/1.0.0/) as its template.
 
+## [2.8.1] - 2021-10-22
+### Added
+- Conda package for windows
+
+### Fixed
+- Remove mentions of cygwin from README
+
 ## [2.8.0] - 2021-07-14
 ### Added
 - Support for build with Native Tools for VS (32 and 64 bit).
