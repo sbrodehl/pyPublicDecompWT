@@ -23,6 +23,15 @@ The compiled image will be stored in the `xRITDecompress` directory (image name 
 - To clean, navigate into PublicDecompWT folder and run "nmake /f makefile.vc clean"
 The procedure has been tested with Visual Studio Community 2019
 
+### Build the conda package
+- It is possible to build the conda package for Linux and Windows (64 bit)
+- Prerequisites:
+  - both platforms: `conda` and `conda-build` must be installed
+  - Windows: Visual Studio Community 2019 must be installed
+- Navigate to the `conda` folder in PublicDecompWT and execute:
+
+`conda build .`
+
 ## Windows and Cygwin
 The source code is reported to be compilable with cygwin64, but the feature is not supported officially
 
