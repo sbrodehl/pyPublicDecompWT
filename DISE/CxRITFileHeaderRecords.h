@@ -431,10 +431,10 @@ public:
 		const long						i_LineOffset,
 		const std::string&				i_DataDefinitionBlock,
 		const DISE::CxRITAnnotation&	i_Annotation,
-		const SYSTIME&			i_TimeStamp,// = Util::CMSGTime::GetTheCurrentTime(),
+		const SYSTIME&			        i_TimeStamp,// = Util::CMSGTime::GetTheCurrentTime(),
 		const std::string&				i_AncillaryText				= "",
 		const unsigned char*			i_pKeyNumber				= NULL,
-		const unsigned __int64*					i_pSeed						= NULL,
+		const unsigned __int64*			i_pSeed						= NULL,
 		const DISE::CSpacecraftID&		i_SpacecraftID				= DISE::CSpacecraftID(0),
 		const DISE::CSpectralChannelID&	i_SpectralChannelID			= DISE::CSpectralChannelID(0),
 		const unsigned short			i_SegmentSeqNo				= 1,
@@ -598,7 +598,7 @@ public:
 	long					GetLOFF()						const { return m_LOFF;					}
 	const std::string&		GetDataDefinitionBlock()		const { return m_DataDefinitionBlock;	}
 	const DISE::CxRITAnnotation&	GetAnnotation()			const { return m_Annotation;			}
-	const SYSTIME&	GetTimeStamp()					const { return m_TimeStamp;				}
+	const SYSTIME&	GetTimeStamp()					        const { return m_TimeStamp;				}
 	const std::string&		GetAncillaryText()				const { return m_AncillaryText;			}
 	unsigned char			GetKeyNumber()					const { return m_KeyNumber;				}
 	unsigned __int64		GetSeed()						const { return m_Seed;					}
