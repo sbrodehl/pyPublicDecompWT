@@ -3,6 +3,8 @@ CPPFLAGS= -I../DISE  -I../COMP/Inc -I../COMP/JPEG/Inc -I../COMP/WT/Inc -I../COMP
 LIBS= -lpthread ../DISE/libDISE.a \
 ../COMP/JPEG/Src/libJPEG.a ../COMP/WT/Src/libWT.a ../COMP/T4/Src/libT4.a ../COMP/Src/libCOMP.a 
 
+DEST_DIR=/usr/local
+
 # Determine if 32 or 64 bits platform
 # Only Linux and SunOs suported
 SYSTEM = $(shell uname -s)
@@ -14,6 +16,13 @@ ifeq ($(SYSTEM),SunOS)
 	BITS = $(shell isainfo -b)
 endif
 export BITS
+
+uninstall: 
+	rm -f $(DEST_DIR)/bin/xRITDecompress
+
+install: all
+	mkdir -p $(DEST_DIR)/bin
+	cp xRITDecompress $(DEST_DIR)/bin
 
 all: xRITDecompress
 
@@ -41,7 +50,7 @@ depend:
 # Test commands and variables
 
 Base_Dir = $(shell pwd)
-Data_Dir = $(shell cd ../../Data && pwd)
+Data_Dir = $(shell cd ../test-data && pwd)
 CompTargets=$(wildcard $(Data_Dir)/compressed_ref/*-C_)
 DecompTargets=$(subst compressed_ref,decompressed,$(subst -C_,-__,$(CompTargets)))
 	

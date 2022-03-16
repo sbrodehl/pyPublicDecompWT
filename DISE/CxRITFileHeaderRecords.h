@@ -141,7 +141,11 @@ struct SLineQualityEntry
 	SLineQualityEntry
 	(
 		const long				i_LineNumberInGrid			= 0,
-		const SYSTIME	i_LineMeanAcquisitionTime	= SYSTIME(),
+#ifdef WIN32
+		const SYSTIME 	i_LineMeanAcquisitionTime = SYSTIME(1958, 1, 1, 0, 0, 0, 0),
+#else
+		const SYSTIME	i_LineMeanAcquisitionTime = SYSTIME(0, 0, 0, 1, 1, 1958),
+#endif		
 		const unsigned char		i_LineValidity				= e_NotDerived,
 		const unsigned char		i_LineRadiometricQuality	= e_NotDerived,
 		const unsigned char		i_LineGeometricQuality		= e_NotDerived
