@@ -1,0 +1,12 @@
+name: CI build
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  CIBW:
+    uses: sbrodehl/pyPublicDecompWT/.github/workflows/cibuildwheel.yml@main
+    secrets:
+      PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}

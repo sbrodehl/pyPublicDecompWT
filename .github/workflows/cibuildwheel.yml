@@ -1,0 +1,45 @@
+name: Build Wheels
+
+on:
+  workflow_call:
+    inputs:
+      fail-fast:
+        description: "Fail fast setting for building wheels."
+        default: true
+        required: false
+        type: boolean
+      deploy:
+        description: "Allow deployment of build wheels."
+        default: true
+        required: false
+        type: boolean
+    secrets:
+      PYPI_PASSWORD:
+        description: "Token for pypi."
+        required: false
+
+jobs:
+  auto-tag:
+    name: Add release tag
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.autotag.outputs.tagsha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Autoadd release Tags
+        uses: sbrodehl/action-autotag@v2.0.0
+        id: autotag
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source_file: "xRITDecompress/xRITDecompress.cpp"
+          # this is the semver regex https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+          # with an capture group (around everything), but all other groups are non capturing
+          # double escape's where necessary
+          extraction_regex: "const char\\* VERSION_NUMBER\\s*=\\s*[\\'\"]((?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?:[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?)[\\'\"]"
+          capture_group: 1
+          tag_message: "Release"
+          tag_format: "v{version}"
+      - name: Show version
+        if: steps.autotag.outputs.tagsha
+        run: echo ${{ steps.autotag.outputs.tagsha }}
