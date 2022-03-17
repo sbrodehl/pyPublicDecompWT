@@ -1,4 +1,4 @@
-# PublicDecompWT
+# pyPublicDecompWT
 
 (Note: Fork of [PublicDecompWT@eumetsat.int](https://gitlab.eumetsat.int/open-source/PublicDecompWT))
 
