@@ -18,13 +18,13 @@ class xRITWrapper {
 public:
     xRITWrapper(char* in_buffer, int in_bytes);
     unsigned long long getOutputLength() const;
-    void write(char* return_buffer);
+    py::bytes data() const;
     unsigned long long getTotalHeaderLength() const;
     int getSpectralChannelID() const;
     int getSegmentSeqNo() const;
     int getFileTypeCode() const;
-    void getTimeStamp(char* buf);
-    void getAnnotationText(char* text);
+    const char *getTimeStamp() const;
+    const char *getAnnotationText() const;
 private:
     std::ostringstream output_buffer;
     unsigned long long output_length = 0;
@@ -59,16 +59,16 @@ xRITWrapper::xRITWrapper(char *in_buffer, int in_bytes) {
     output_length = output_buffer.tellp();
 }
 
-void xRITWrapper::getAnnotationText(char *text) {
-    std::memcpy(text, file_annotation.c_str(), file_annotation.length());
+const char *xRITWrapper::getAnnotationText() const {
+    return file_annotation.c_str();
 }
 
 unsigned long long xRITWrapper::getOutputLength() const {
     return output_length;
 }
 
-void xRITWrapper::write(char* return_buffer) {
-    std::memcpy(return_buffer, output_buffer.str().c_str(), output_length);
+py::bytes xRITWrapper::data() const {
+    return py::bytes(output_buffer.str());
 }
 
 unsigned long long xRITWrapper::getTotalHeaderLength() const {
@@ -83,8 +83,8 @@ int xRITWrapper::getSegmentSeqNo() const {
     return segmentSeqNo;
 }
 
-void xRITWrapper::getTimeStamp(char *buf) {
-    std::memcpy(buf, utctime_format.c_str(), 14);
+const char *xRITWrapper::getTimeStamp() const {
+    return utctime_format.c_str();
 }
 
 int xRITWrapper::getFileTypeCode() const {
@@ -96,7 +96,7 @@ PYBIND11_MODULE(pyxRITDecompress, m) {
             .def(py::init<char *, int>())
             .def("getAnnotationText", &xRITWrapper::getAnnotationText)
             .def("getOutputLength", &xRITWrapper::getOutputLength)
-            .def("write", &xRITWrapper::write)
+            .def("data", &xRITWrapper::data)
             .def("getTotalHeaderLength", &xRITWrapper::getTotalHeaderLength)
             .def("getSpectralChannelID", &xRITWrapper::getSpectralChannelID)
             .def("getSegmentSeqNo", &xRITWrapper::getSegmentSeqNo)
