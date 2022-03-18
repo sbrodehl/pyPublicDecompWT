@@ -16,6 +16,7 @@ set_property(TARGET ${LIBNAME} APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Inc>
         $<INSTALL_INTERFACE:Inc>  # <prefix>/Inc
         )
+install(TARGETS ${LIBNAME} DESTINATION .)
 
 
 # add subdirs

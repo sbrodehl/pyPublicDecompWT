@@ -4,15 +4,17 @@
 #include <cstring>
 #include <memory>
 
+#include <pybind11/pybind11.h>
+
 #include "CxRITFile.h"				// DISE
 #include "CxRITFileDecompressed.h"	// DISE
 
-const char* VERSION_NUMBER="2.7.2";
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
 
-#define EXTERN_DLL_EXPORT extern "C"
-#ifdef _WIN32
-#define EXTERN_DLL_EXPORT extern "C" __declspec(dllexport)
-#endif
+namespace py = pybind11;
+
+const char* VERSION_NUMBER="2.8.1";
 
 class xRITWrapper {
 public:
@@ -91,38 +93,16 @@ int xRITWrapper::getFileTypeCode() const {
     return fileTypeCode;
 }
 
-
-// Define C functions for the C++ class - as ctypes can only talk to C...
-EXTERN_DLL_EXPORT {
-    xRITWrapper* xRITWrapper_Constructor(char* in_buffer, int in_bytes) {
-        return new xRITWrapper(in_buffer, in_bytes);
-    }
-    void xRITWrapper_Destructor(xRITWrapper* foo){
-        delete foo;
-        foo = nullptr;
-    }
-    int xRITWrapper_getSpectralChannelID(xRITWrapper* foo) {
-        return foo->getSpectralChannelID();
-    }
-    int xRITWrapper_getFileTypeCode(xRITWrapper* foo) {
-        return foo->getFileTypeCode();
-    }
-    int xRITWrapper_getSegmentSeqNo(xRITWrapper* foo) {
-        return foo->getSegmentSeqNo();
-    }
-    unsigned long long xRITWrapper_getOutputLength(xRITWrapper* foo) {
-        return foo->getOutputLength();
-    }
-    unsigned long long xRITWrapper_getTotalHeaderLength(xRITWrapper* foo) {
-        return foo->getTotalHeaderLength();
-    }
-    void xRITWrapper_write(xRITWrapper* foo, char* buf) {
-        return foo->write(buf);
-    }
-    void xRITWrapper_getTimeStamp(xRITWrapper* foo, char* buf) {
-        return foo->getTimeStamp(buf);
-    }
-    void xRITWrapper_getAnnotationText(xRITWrapper* foo, char* text) {
-        return foo->getAnnotationText(text);
-    }
+PYBIND11_MODULE(pyxRITDecompress, m) {
+    py::class_<xRITWrapper>(m, "xRITWrapper", py::dynamic_attr())
+            .def(py::init<char *, int>())
+            .def("getAnnotationText", &xRITWrapper::getAnnotationText)
+            .def("getOutputLength", &xRITWrapper::getOutputLength)
+            .def("write", &xRITWrapper::write)
+            .def("getTotalHeaderLength", &xRITWrapper::getTotalHeaderLength)
+            .def("getSpectralChannelID", &xRITWrapper::getSpectralChannelID)
+            .def("getSegmentSeqNo", &xRITWrapper::getSegmentSeqNo)
+            .def("getTimeStamp", &xRITWrapper::getTimeStamp)
+            .def("getFileTypeCode", &xRITWrapper::getFileTypeCode);
+    m.attr("__version__") = MACRO_STRINGIFY(VERSION_NUMBER);
 }

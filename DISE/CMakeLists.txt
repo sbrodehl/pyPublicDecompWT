@@ -19,3 +19,4 @@ set(SOURCE_FILES
 
 add_library(${LIBNAME} SHARED ${SOURCE_FILES})
 target_include_directories(${LIBNAME} PUBLIC .)
+install(TARGETS ${LIBNAME} DESTINATION .)
