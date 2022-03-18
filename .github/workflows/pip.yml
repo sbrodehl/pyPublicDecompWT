@@ -22,6 +22,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install pybind11
+        run: pip install --verbose pybind11
+
       - name: Set min macOS version
         if: matrix.python-version == 'pypy-3.7' && runner.os == 'macOS'
         run: |
