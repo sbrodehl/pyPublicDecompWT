@@ -4,7 +4,7 @@ import subprocess
 import sys
 import codecs
 
-from setuptools import Extension, setup, find_packages
+from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -154,11 +154,10 @@ if __name__ == "__main__":
         long_description="",
         ext_modules=[CMakeExtension("pyxRITDecompress")],
         cmdclass={"build_ext": CMakeBuild},
-        # packages=find_packages(where="pybind"),
-        # package_dir={"": "pybind"},
-        # include_package_data=True,
+        include_package_data=True,
         zip_safe=False,
         python_requires=">=3.6",
+        extras_require={"test": ["pytest"]},
         classifiers=[
             "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
