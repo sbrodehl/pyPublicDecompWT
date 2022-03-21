@@ -72,7 +72,9 @@ jobs:
 
       - name: Check source distribution
         run: |
-          mkdir -p /tmp/installation_dir && cd /tmp/installation_dir && pip install $( ls ${GITHUB_WORKSPACE}/dist/*.tar.gz )
+          mkdir -p /tmp/installation_dir && cd /tmp/installation_dir
+          python -m pip install -U pip && python -m pip install wheel "pybind11[global]"
+          python -m pip install $( ls ${GITHUB_WORKSPACE}/dist/*.tar.gz )
           cd ${GITHUB_WORKSPACE}
 
       - name: Publish to PyPI
