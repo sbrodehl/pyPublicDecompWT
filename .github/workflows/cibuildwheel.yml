@@ -87,6 +87,7 @@ jobs:
 
   build-wheels:
     needs: [build_sdist]
+    if: ${{ needs.auto-tag.outputs.sha && inputs.deploy }}
     name: Build wheels on ${{ matrix.os }} (${{ matrix.cibw_archs }})
     runs-on: ${{ matrix.os }}
     env:
