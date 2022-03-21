@@ -1,0 +1,7 @@
+include README.md LICENSE AUTHORS.txt CHANGELOG.md PublicDecompWT.ABOUT
+graft COMP
+graft DISE
+graft pybind
+graft xRITDecompress
+global-include CMakeLists.txt *.cmake
+prune cmake-build*
