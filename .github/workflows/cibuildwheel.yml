@@ -70,6 +70,11 @@ jobs:
           name: wheels
           path: ./dist/*tar.gz
 
+      - name: Check source distribution
+        run: |
+          mkdir -p /tmp/installation_dir && cd /tmp/installation_dir && pip install $( ls ${GITHUB_WORKSPACE}/dist/*.tar.gz )
+          cd ${GITHUB_WORKSPACE}
+
       - name: Publish to PyPI
         if: ${{ needs.auto-tag.outputs.sha && inputs.deploy }}
         uses: pypa/gh-action-pypi-publish@master
@@ -143,7 +148,7 @@ jobs:
   deploy:
     name: Deploy to PyPI
     runs-on: ubuntu-latest
-    needs: [auto-tag, build-wheels]
+    needs: [auto-tag, build_sdist, build-wheels]
     if: ${{ needs.auto-tag.outputs.sha && inputs.deploy }}
     steps:
       - name: Download all the dists
