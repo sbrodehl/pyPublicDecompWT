@@ -16,7 +16,7 @@ const char* VERSION_NUMBER="2.8.1";
 
 class xRITWrapper {
 public:
-    xRITWrapper(char* in_buffer, int in_bytes);
+    explicit xRITWrapper(const py::bytes& in_buffer);
     unsigned long long getOutputLength() const;
     py::bytes data() const;
     unsigned long long getTotalHeaderLength() const;
@@ -36,8 +36,8 @@ private:
     std::string utctime_format;
 };
 
-xRITWrapper::xRITWrapper(char *in_buffer, int in_bytes) {
-    std::istringstream in_stream(std::string(in_buffer, in_bytes));
+xRITWrapper::xRITWrapper(const py::bytes& in_buffer) {
+    std::istringstream in_stream(in_buffer);
     // Open input file.
     DISE::CxRITFile compressedFile;
     try {
@@ -93,7 +93,7 @@ int xRITWrapper::getFileTypeCode() const {
 
 PYBIND11_MODULE(pyxRITDecompress, m) {
     py::class_<xRITWrapper>(m, "xRITWrapper", py::dynamic_attr())
-            .def(py::init<char *, int>())
+            .def(py::init<py::bytes&>())
             .def("getAnnotationText", &xRITWrapper::getAnnotationText)
             .def("getOutputLength", &xRITWrapper::getOutputLength)
             .def("data", &xRITWrapper::data)

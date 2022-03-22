@@ -27,7 +27,7 @@ def test_decompression():
         uc_pt = next(iter(uncompressed_dir.glob(f"{c_pt.name[:-2]}*")))
         with open(c_pt, mode="rb") as fh:
             buf = fh.read()
-            xrit = pyxRITDecompress.xRITWrapper(buf, len(buf))
+            xrit = pyxRITDecompress.xRITWrapper(buf)
             pyxrit_un_buf = xrit.data()
         with open(uc_pt, mode="rb") as fh:
             un_buf = fh.read()
@@ -39,7 +39,7 @@ def test_output_length():
     for c_pt in compressed_dir.glob("*-C_"):
         with open(c_pt, mode="rb") as fh:
             buf = fh.read()
-            xrit = pyxRITDecompress.xRITWrapper(buf, len(buf))
+            xrit = pyxRITDecompress.xRITWrapper(buf)
             output_length = xrit.getOutputLength()
             pyxrit_un_buf = xrit.data()
             assert len(pyxrit_un_buf) == output_length
@@ -50,7 +50,7 @@ def test_annotation_text():
     for c_pt in compressed_dir.glob("*-C_"):
         with open(c_pt, mode="rb") as fh:
             buf = fh.read()
-            xrit = pyxRITDecompress.xRITWrapper(buf, len(buf))
+            xrit = pyxRITDecompress.xRITWrapper(buf)
             annotation_text = xrit.getAnnotationText()
             assert annotation_text == c_pt.name.replace("-C_", "-__")
 
@@ -60,7 +60,7 @@ def test_total_header_length():
     for c_pt in compressed_dir.glob("*-C_"):
         with open(c_pt, mode="rb") as fh:
             buf = fh.read()
-            xrit = pyxRITDecompress.xRITWrapper(buf, len(buf))
+            xrit = pyxRITDecompress.xRITWrapper(buf)
             total_header_length = xrit.getTotalHeaderLength()
             assert total_header_length == 49584  # TODO: Is this always the same?
 
@@ -70,7 +70,7 @@ def test_file_type_code():
     for c_pt in compressed_dir.glob("*-C_"):
         with open(c_pt, mode="rb") as fh:
             buf = fh.read()
-            xrit = pyxRITDecompress.xRITWrapper(buf, len(buf))
+            xrit = pyxRITDecompress.xRITWrapper(buf)
             file_type_code = xrit.getFileTypeCode()
             assert file_type_code == 0  # TODO: Is this always the same?
 
@@ -80,7 +80,7 @@ def test_segment_seq_no():
     for c_pt in compressed_dir.glob("*-C_"):
         with open(c_pt, mode="rb") as fh:
             buf = fh.read()
-            xrit = pyxRITDecompress.xRITWrapper(buf, len(buf))
+            xrit = pyxRITDecompress.xRITWrapper(buf)
             segment_seq_no = xrit.getSegmentSeqNo()
             assert segment_seq_no == int(c_pt.name.split('-')[-3].replace("_", ""))
 
@@ -90,6 +90,6 @@ def test_spectral_channel_id():
     for c_pt in compressed_dir.glob("*-C_"):
         with open(c_pt, mode="rb") as fh:
             buf = fh.read()
-            xrit = pyxRITDecompress.xRITWrapper(buf, len(buf))
+            xrit = pyxRITDecompress.xRITWrapper(buf)
             spectral_channel_id = xrit.getSpectralChannelID()
             assert spectral_channel_id == E_SC_CHAN_ID[c_pt.name.split('-')[-4].replace('_', '')]
