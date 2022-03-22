@@ -38,6 +38,8 @@ CLASSIFIERS = [
 ]
 INSTALL_REQUIRES = [
     "pybind11[global]",
+    "setuptools",
+    "wheel"
 ]
 
 

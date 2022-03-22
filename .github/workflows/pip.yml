@@ -22,9 +22,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install pybind11 & wheel
-        run: pip install --verbose wheel "pybind11[global]"
-
       - name: Set min macOS version
         if: matrix.python-version == 'pypy-3.7' && runner.os == 'macOS'
         run: |
