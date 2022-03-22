@@ -75,6 +75,7 @@ jobs:
           mkdir -p /tmp/installation_dir && cd /tmp/installation_dir
           python -m pip install -U pip && python -m pip install wheel "pybind11[global]"
           python -m pip install -v $( ls ${GITHUB_WORKSPACE}/dist/*.tar.gz )
+          cd /tmp && python -c "import pyxRITDecompress"
           cd ${GITHUB_WORKSPACE}
 
       - name: Publish to PyPI
