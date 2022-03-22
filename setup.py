@@ -8,11 +8,42 @@ from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+PROJECT_URL = "https://github.com/sbrodehl/pyPublicDecompWT"
+KEYWORDS = [
+    "PublicDecompWT",
+    "Wavelet Decompression",
+    "xRITDecompress",
+    "xRIT",
+    "Meteosat",
+    "EUMETSAT",
+]
+CLASSIFIERS = [
+    "Development Status :: 4 - Beta",
+    "Natural Language :: English",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+INSTALL_REQUIRES = [
+    "pybind11",
+]
 
 
 def read(*parts):
     """
-    Build an absolute path from *parts* and and return the contents of the
+    Build an absolute path from *parts* and return the contents of the
     resulting file.  Assume UTF-8 encoding.
     """
     with codecs.open(os.path.join(HERE, *parts), "rb", "utf-8") as f:
@@ -158,19 +189,20 @@ if __name__ == "__main__":
         author_email="foss@sbrodehl.de",
         description="Python bindings for EUMETSAT's PublicDecompWT.",
         license="Apache-2.0 License",
-        long_description="",
+        url=PROJECT_URL,
+        project_urls={
+            "Documentation": PROJECT_URL,
+            "Source": PROJECT_URL,
+            "Tracker": PROJECT_URL + "/issues",
+        },
+        long_description_content_type="text/markdown",
+        long_description=read("README.md"),
         ext_modules=[CMakeExtension("pyPublicDecompWT")],
         cmdclass={"build_ext": CMakeBuild},
         include_package_data=True,
         zip_safe=False,
         python_requires=">=3.7",
         extras_require={"test": ["pytest"]},
-        classifiers=[
-            "Development Status :: 4 - Beta",
-            "Intended Audience :: Developers",
-            "Operating System :: MacOS :: MacOS X",
-            "Operating System :: Microsoft :: Windows",
-            "Operating System :: POSIX",
-            "Programming Language :: Python",
-        ],
+        classifiers=CLASSIFIERS,
+        install_requires=INSTALL_REQUIRES,
     )
