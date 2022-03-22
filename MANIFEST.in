@@ -4,4 +4,5 @@ graft DISE
 graft pybind
 graft xRITDecompress
 global-include CMakeLists.txt *.cmake
+global-exclude makefile.vc Makefile *.dsp *.opt *.plg
 prune cmake-build*
