@@ -7,6 +7,6 @@ on:
 
 jobs:
   CIBW:
-    uses: sbrodehl/pyPublicDecompWT/.github/workflows/cibuildwheel.yml@main
+    uses: sbrodehl/pyxRITDecompress/.github/workflows/cibuildwheel.yml@main
     secrets:
       PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
