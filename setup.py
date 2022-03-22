@@ -37,7 +37,7 @@ CLASSIFIERS = [
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
 INSTALL_REQUIRES = [
-    "pybind11",
+    "pybind11[global]",
 ]
 
 
