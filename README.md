@@ -1,7 +1,7 @@
 # pyxRITDecompress
 [![CI build](https://github.com/sbrodehl/pyPublicDecompWT/actions/workflows/trigger.yml/badge.svg)](https://github.com/sbrodehl/pyPublicDecompWT/actions/workflows/trigger.yml)
 
-This package provides python bindings for [PublicDecompWT@eumetsat.int](https://gitlab.eumetsat.int/open-source/PublicDecompWT).
+This package provides python bindings for some of [PublicDecompWT@eumetsat.int](https://gitlab.eumetsat.int/open-source/PublicDecompWT) tools.
 
 With [pyxRITDecompress](https://github.com/sbrodehl/pyPublicDecompWT) compressed XRIT files can now be decompressed in-memory, directly with python!  
 Currently, only bindings for the tool `xRITDecompress` are available, if you need other classes / libraries please open a [pull-request](https://github.com/sbrodehl/pyPublicDecompWT/pulls).
