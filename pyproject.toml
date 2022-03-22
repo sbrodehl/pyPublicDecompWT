@@ -1,0 +1,7 @@
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+    "cmake>=3.15.0",
+    "pybind11[global]",
+]

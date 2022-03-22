@@ -36,11 +36,6 @@ CLASSIFIERS = [
     "Topic :: Scientific/Engineering :: Atmospheric Science",
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
-INSTALL_REQUIRES = [
-    "pybind11[global]",
-    "setuptools",
-    "wheel"
-]
 
 
 def read(*parts):
@@ -206,5 +201,4 @@ if __name__ == "__main__":
         python_requires=">=3.7",
         extras_require={"test": ["pytest"]},
         classifiers=CLASSIFIERS,
-        install_requires=INSTALL_REQUIRES,
     )
