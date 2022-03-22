@@ -152,14 +152,14 @@ class CMakeBuild(build_ext):
 
 if __name__ == "__main__":
     setup(
-        name="pyxRITDecompress",
+        name="pyPublicDecompWT",
         version=find_version(),
         author="Sebastian Brodehl",
         author_email="foss@sbrodehl.de",
         description="Python bindings for EUMETSAT's PublicDecompWT.",
         license="Apache-2.0 License",
         long_description="",
-        ext_modules=[CMakeExtension("pyxRITDecompress")],
+        ext_modules=[CMakeExtension("pyPublicDecompWT")],
         cmdclass={"build_ext": CMakeBuild},
         include_package_data=True,
         zip_safe=False,

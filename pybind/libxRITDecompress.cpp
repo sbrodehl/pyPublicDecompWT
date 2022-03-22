@@ -14,9 +14,9 @@ namespace py = pybind11;
 
 const char* VERSION_NUMBER="2.8.1";
 
-class xRITWrapper {
+class xRITDecompress {
 public:
-    explicit xRITWrapper(const py::bytes& in_buffer);
+    explicit xRITDecompress(const py::bytes& in_buffer);
     unsigned long long getOutputLength() const;
     py::bytes data() const;
     unsigned long long getTotalHeaderLength() const;
@@ -36,7 +36,7 @@ private:
     std::string utctime_format;
 };
 
-xRITWrapper::xRITWrapper(const py::bytes& in_buffer) {
+xRITDecompress::xRITDecompress(const py::bytes& in_buffer) {
     std::istringstream in_stream(in_buffer);
     // Open input file.
     DISE::CxRITFile compressedFile;
@@ -59,48 +59,48 @@ xRITWrapper::xRITWrapper(const py::bytes& in_buffer) {
     output_length = output_buffer.tellp();
 }
 
-const char *xRITWrapper::getAnnotationText() const {
+const char *xRITDecompress::getAnnotationText() const {
     return file_annotation.c_str();
 }
 
-unsigned long long xRITWrapper::getOutputLength() const {
+unsigned long long xRITDecompress::getOutputLength() const {
     return output_length;
 }
 
-py::bytes xRITWrapper::data() const {
+py::bytes xRITDecompress::data() const {
     return py::bytes(output_buffer.str());
 }
 
-unsigned long long xRITWrapper::getTotalHeaderLength() const {
+unsigned long long xRITDecompress::getTotalHeaderLength() const {
     return totalHeaderLength;
 }
 
-int xRITWrapper::getSpectralChannelID() const {
+int xRITDecompress::getSpectralChannelID() const {
     return spectralChannelID;
 }
 
-int xRITWrapper::getSegmentSeqNo() const {
+int xRITDecompress::getSegmentSeqNo() const {
     return segmentSeqNo;
 }
 
-const char *xRITWrapper::getTimeStamp() const {
+const char *xRITDecompress::getTimeStamp() const {
     return utctime_format.c_str();
 }
 
-int xRITWrapper::getFileTypeCode() const {
+int xRITDecompress::getFileTypeCode() const {
     return fileTypeCode;
 }
 
-PYBIND11_MODULE(pyxRITDecompress, m) {
-    py::class_<xRITWrapper>(m, "xRITWrapper", py::dynamic_attr())
+PYBIND11_MODULE(pyPublicDecompWT, m) {
+    py::class_<xRITDecompress>(m, "xRITDecompress", py::dynamic_attr())
             .def(py::init<py::bytes&>())
-            .def("getAnnotationText", &xRITWrapper::getAnnotationText)
-            .def("getOutputLength", &xRITWrapper::getOutputLength)
-            .def("data", &xRITWrapper::data)
-            .def("getTotalHeaderLength", &xRITWrapper::getTotalHeaderLength)
-            .def("getSpectralChannelID", &xRITWrapper::getSpectralChannelID)
-            .def("getSegmentSeqNo", &xRITWrapper::getSegmentSeqNo)
-            .def("getTimeStamp", &xRITWrapper::getTimeStamp)
-            .def("getFileTypeCode", &xRITWrapper::getFileTypeCode);
+            .def("getAnnotationText", &xRITDecompress::getAnnotationText)
+            .def("getOutputLength", &xRITDecompress::getOutputLength)
+            .def("data", &xRITDecompress::data)
+            .def("getTotalHeaderLength", &xRITDecompress::getTotalHeaderLength)
+            .def("getSpectralChannelID", &xRITDecompress::getSpectralChannelID)
+            .def("getSegmentSeqNo", &xRITDecompress::getSegmentSeqNo)
+            .def("getTimeStamp", &xRITDecompress::getTimeStamp)
+            .def("getFileTypeCode", &xRITDecompress::getFileTypeCode);
     m.attr("__version__") = VERSION_NUMBER;
 }
