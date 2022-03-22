@@ -20,12 +20,9 @@ pip install pyPublicDecompWT
 The following command will verify if the installation succeeded:
 
 ```bash
-python -c "import pyPublicDecompWT"
+python -c "import pyxRITDecompress"
 ```
 
 ### Dependencies
-- GNU-GCC (`g++`, tested with version 4.2.x or previous version 3.x)
-- GNU-make (`make`, tested with version 3.79.1)
-- `ar`
-- `ranlib`
-- `nmake` as part of the Native Tools for VS
+- C/C++ Compiler, e.g. GNU-GCC
+- `CMake`
