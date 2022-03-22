@@ -72,6 +72,8 @@ class CMakeBuild(build_ext):
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
+            "-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE",  # https://stackoverflow.com/a/58175755 (E.g. https://github.com/sizmailov/pyxmolpp2/blob/master/setup.py#L42-L44)
+            "-DCMAKE_INSTALL_RPATH={}".format("$ORIGIN"),
         ]
         build_args = []
         # Adding CMake arguments set as environment variable
