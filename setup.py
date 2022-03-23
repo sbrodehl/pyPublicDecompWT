@@ -32,7 +32,6 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.10",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "Intended Audience :: Education",
     "Topic :: Scientific/Engineering :: Atmospheric Science",
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
@@ -201,4 +200,5 @@ if __name__ == "__main__":
         python_requires=">=3.7",
         extras_require={"test": ["pytest"]},
         classifiers=CLASSIFIERS,
+        scripts=['scripts/xRITDecompress'],
     )

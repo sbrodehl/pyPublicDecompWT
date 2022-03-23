@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+from pathlib import Path
+import argparse
+
+import pyPublicDecompWT
+from pyPublicDecompWT import xRITDecompress
+
+parser = argparse.ArgumentParser(
+    prog="xRITDecompress",
+    description="Command line tool for manual decompression of HRIT/LRIT files.",
+)
+parser.add_argument("--version", action="version", version="%(prog)s {version}".format(version=pyPublicDecompWT.__version__))
+parser.add_argument("-v", "--verbose", help="Verbose mode", action="store_true")
+parser.add_argument("-s", dest="file", help="Name of compressed HRIT/LRIT file", type=str)
+parser.add_argument("files", help="Name of compressed HRIT/LRIT file(s)", nargs='*', type=str)
+args = parser.parse_args()
+
+source_files = list(filter(None, [args.file] + args.files))
+if len(source_files) == 0:
+    parser.error("No compressed HRIT/LRIT file(s) specified.")
+
+for fn in source_files:
+    pt = Path(fn).resolve()
+    assert pt.exists()
+    with open(pt, mode="rb") as fh:
+        xrit = xRITDecompress(fh.read())
+
+    with open(pt.with_name(xrit.getAnnotationText()), mode="wb") as fh:
+        fh.write(xrit.data())
+    if args.verbose:
+        print(f"Decompressed file: {xrit.getAnnotationText()}")
