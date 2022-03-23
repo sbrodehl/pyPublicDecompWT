@@ -40,7 +40,30 @@ with open(compressed_file, mode="rb") as fh:
 
 xRIT = xRITDecompress(buf)
 uncompressed = xRIT.data()
+```
 
+### `xRITDecompress`
+
+To comply with the original PublicDecompWT project, the pyPublicDecompWT package provides a [`xRITDecompress` executable](scripts/xRITDecompress) as well.  
+Our `xRITDecompress` script is a near drop-in replacement for the original, except not writing "Decompressed file ..." to `stdout`.  
+This behaviour can be enabled by passing `-v` to `xRITDecompress`.  
+
+In addition to the `-s` option we added a positional argument `files` to enable batch processing of multiple files in a single call.
+
+```
+$ xRITDecompress --help
+usage: xRITDecompress [-h] [--version] [-v] [-s FILE] [files ...]
+
+Command line tool for manual decompression of HRIT/LRIT files.
+
+positional arguments:
+  files          Name of compressed HRIT/LRIT file(s)
+
+options:
+  -h, --help     show this help message and exit
+  --version      show program`s version number and exit
+  -v, --verbose  Verbose mode
+  -s FILE        Name of compressed HRIT/LRIT file
 ```
 
 [1]: https://github.com/sbrodehl/pyPublicDecompWT
