@@ -46,8 +46,8 @@ uncompressed = xRIT.data()
 
 ### `xRITDecompress`
 
-To comply with the original PublicDecompWT project, the pyPublicDecompWT package provides a [`xRITDecompress` executable](scripts/xRITDecompress) as well.  
-Our `xRITDecompress` script is a near drop-in replacement for the original, except not writing "Decompressed file ..." to `stdout`.  
+To comply with the original PublicDecompWT project, the pyPublicDecompWT package provides a [`xRITDecompress` executable](scripts/xRITDecompress) as well.
+Our `xRITDecompress` script is a near drop-in replacement for the original, except not writing "Decompressed file ..." to `stdout`.
 This behaviour can be enabled by passing `-v` to `xRITDecompress`.  
 
 In addition to the `-s` option we added a positional argument `files` to enable batch processing of multiple files in a single call.
