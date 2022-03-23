@@ -1,4 +1,6 @@
 # pyPublicDecompWT
+[![python versions](https://img.shields.io/pypi/pyversions/pyPublicDecompWT)](https://pypi.org/project/pyPublicDecompWT)
+[![wheel](https://img.shields.io/pypi/wheel/pyPublicDecompWT)](https://pypi.org/project/pyPublicDecompWT/#files)
 [![CI build](https://github.com/sbrodehl/pyPublicDecompWT/actions/workflows/trigger.yml/badge.svg)](https://github.com/sbrodehl/pyPublicDecompWT/actions/workflows/trigger.yml)
 
 This package provides python bindings for some of [EUMETSAT’s PublicDecompWT][2] tools.
