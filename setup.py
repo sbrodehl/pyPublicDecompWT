@@ -68,7 +68,7 @@ def find_version():
         read("pybind/VERSION"), re.M
     )
     if meta_match:
-        return "+".join([meta_match.group(1), f"{''.join(find_eumetsat_version().split('.')):}"])
+        return ".post".join([meta_match.group(1), f"{''.join(find_eumetsat_version().split('.')):}"])
     raise RuntimeError("Unable to find VERSION_NUMBER string.")
 
 
