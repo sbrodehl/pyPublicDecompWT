@@ -9,10 +9,10 @@
 #include "CxRITFile.h"				// DISE
 #include "CxRITFileDecompressed.h"	// DISE
 
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
 
 namespace py = pybind11;
-
-const char* VERSION_NUMBER="2.8.1";
 
 class xRITDecompress {
 public:
@@ -102,5 +102,10 @@ PYBIND11_MODULE(pyPublicDecompWT, m) {
             .def("getSegmentSeqNo", &xRITDecompress::getSegmentSeqNo)
             .def("getTimeStamp", &xRITDecompress::getTimeStamp)
             .def("getFileTypeCode", &xRITDecompress::getFileTypeCode);
-    m.attr("__version__") = VERSION_NUMBER;
+#ifdef VERSION_INFO
+    m.attr("__version__") = MACRO_STRINGIFY(PYXRITDECOMPRESS_VERSION_INFO);
+#else
+    m.attr("__version__") = "dev";
+#endif
+
 }
