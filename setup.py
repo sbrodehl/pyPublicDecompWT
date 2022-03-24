@@ -46,16 +46,29 @@ def read(*parts):
         return f.read()
 
 
+def find_eumetsat_version():
+    """
+    Extract __*meta*__ from META_FILE.
+    """
+    meta_match = re.search(
+        r"version\s*:\s*[\'\"]*((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)[\'\"]*",
+        read("PublicDecompWT.ABOUT"), re.M
+    )
+    if meta_match:
+        return meta_match.group(1)
+    raise RuntimeError("Unable to find VERSION_NUMBER string.")
+
+
 def find_version():
     """
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        r"const char\* VERSION_NUMBER\s*=\s*[\'\"]((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)[\'\"]",
-        read("xRITDecompress/xRITDecompress.cpp"), re.M
+        r"version\s*:\s*[\'\"]*((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)[\'\"]*",
+        read("pybind/VERSION"), re.M
     )
     if meta_match:
-        return meta_match.group(1)
+        return "-".join([find_eumetsat_version(), meta_match.group(1)])
     raise RuntimeError("Unable to find VERSION_NUMBER string.")
 
 
@@ -183,7 +196,7 @@ if __name__ == "__main__":
         version=find_version(),
         author="Sebastian Brodehl",
         author_email="foss@sbrodehl.de",
-        description="Python bindings for EUMETSAT's PublicDecompWT.",
+        description="Python bindings for EUMETSAT's PublicDecompWT",
         license="Apache-2.0 License",
         url=PROJECT_URL,
         project_urls={
