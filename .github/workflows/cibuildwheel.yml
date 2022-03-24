@@ -27,6 +27,7 @@ jobs:
   auto-tag:
     name: Add release tag
     runs-on: ubuntu-latest
+    needs: [build_sdist]
     outputs:
       sha: ${{ steps.autotag.outputs.tagsha }}
     steps:
@@ -37,11 +38,11 @@ jobs:
         id: autotag
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          source_file: "xRITDecompress/xRITDecompress.cpp"
+          source_file: ".package_version"
           # this is the semver regex https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
           # with a capture group (around everything), but all other groups are non capturing
           # double escape's where necessary
-          extraction_regex: "const char\\* VERSION_NUMBER\\s*=\\s*[\\'\"]((?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?:[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?)[\\'\"]"
+          extraction_regex: "version\\s*=\\s*[\\'\"]((?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?:[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?)[\\'\"]"
           capture_group: 1
           tag_message: "Release"
           tag_format: "v{version}"
@@ -52,7 +53,6 @@ jobs:
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-latest
-    needs: [auto-tag]
     steps:
       - uses: actions/checkout@v2
 
@@ -81,6 +81,9 @@ jobs:
           cd /tmp && python -c "import pyPublicDecompWT"
           cd ${GITHUB_WORKSPACE}
 
+      - name: Store sdist
+        run: echo 'version='`pip show pyPublicDecompWT | grep "Version:" | cut -c 10-` > .package_version
+
       - name: Publish to PyPI
         if: ${{ needs.auto-tag.outputs.sha && inputs.deploy }}
         uses: pypa/gh-action-pypi-publish@master
@@ -90,7 +93,7 @@ jobs:
           password: ${{ secrets.PYPI_PASSWORD }}
 
   build-aarch64:
-    needs: [build_sdist, build-wheels]
+    needs: [build_sdist, auto-tag, build-wheels]
     if: ${{ needs.auto-tag.outputs.sha && inputs.deploy && inputs.aarch64 }}
     name: Build wheels on ${{ matrix.os }} (${{ matrix.cibw_archs }})
     runs-on: ${{ matrix.os }}
@@ -146,7 +149,7 @@ jobs:
           path: ./dist/*.whl
 
   build-wheels:
-    needs: [build_sdist]
+    needs: [build_sdist, auto-tag]
     if: ${{ needs.auto-tag.outputs.sha && inputs.deploy }}
     name: Build wheels on ${{ matrix.os }} (${{ matrix.cibw_archs }})
     runs-on: ${{ matrix.os }}

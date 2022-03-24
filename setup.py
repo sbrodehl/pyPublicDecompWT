@@ -68,7 +68,7 @@ def find_version():
         read("pybind/VERSION"), re.M
     )
     if meta_match:
-        return "-".join([find_eumetsat_version(), meta_match.group(1)])
+        return "+".join([meta_match.group(1), find_eumetsat_version()])
     raise RuntimeError("Unable to find VERSION_NUMBER string.")
 
 
