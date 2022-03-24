@@ -5,7 +5,7 @@
 
 This package provides python bindings for some of [EUMETSAT’s PublicDecompWT][2] tools.
 
-With [pyPublicDecompWT][1] compressed XRIT files can now be decompressed in-memory, directly with python!  
+With [pyPublicDecompWT][1] compressed xRIT (HRIT/LRIT) files can now be decompressed in-memory, directly with python!  
 Currently, only bindings for the tool `xRITDecompress` are available, if you need other classes / libraries please open a [pull-request][3].
 
 This repository contains / mirrors the source code for the complete [PublicDecompWT][2] tool, as well.
