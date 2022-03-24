@@ -13,6 +13,11 @@ on:
         default: true
         required: false
         type: boolean
+      aarch64:
+        description: "Allow build of aarch64 wheels."
+        default: false
+        required: false
+        type: boolean
     secrets:
       PYPI_PASSWORD:
         description: "Token for pypi."
@@ -84,22 +89,17 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_PASSWORD }}
 
-  build-wheels:
-    needs: [build_sdist]
-    if: ${{ needs.auto-tag.outputs.sha && inputs.deploy }}
+  build-aarch64:
+    needs: [build_sdist, build-wheels]
+    if: ${{ needs.auto-tag.outputs.sha && inputs.deploy && inputs.aarch64 }}
     name: Build wheels on ${{ matrix.os }} (${{ matrix.cibw_archs }})
     runs-on: ${{ matrix.os }}
-    env:
-      CIBW_ARCHS_MACOS: "x86_64 arm64"
-      CIBW_SKIP: "*_i686 *-win32 pp* *-musllinux_*"
     strategy:
       fail-fast: ${{ inputs.fail-fast }}
       matrix:
-        os: [ubuntu-latest, macos-latest]  # , windows-latest]
-        cibw_archs: ["auto"]
-        include:
-          - os: ubuntu-20.04
-            cibw_archs: "aarch64"
+        os: [ubuntu-20.04]
+        cibw_archs: ["aarch64"]
+
     steps:
       - uses: actions/checkout@v2
         with:
@@ -115,6 +115,59 @@ jobs:
         uses: docker/setup-qemu-action@v1
         with:
           platforms: arm64
+
+      - name: Install requirements
+        run: |
+          python -m pip install cibuildwheel==2.2.2
+
+      - name: Build wheels for CPython 3.10
+        run: |
+          python -m cibuildwheel --output-dir dist
+        env:
+          CIBW_BUILD: "cp310-*"
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_24
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_24
+          CIBW_BEFORE_BUILD: python -m pip install -U pip
+          CIBW_ARCHS: ${{ matrix.cibw_archs }}
+
+      - name: Build wheels for CPython 3.7 / 3.8 / 3.9
+        run: |
+          python -m cibuildwheel --output-dir dist
+        env:
+          CIBW_BUILD: "cp37-* cp38-* cp39-*"
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014
+          CIBW_BEFORE_BUILD: python -m pip install -U pip
+          CIBW_ARCHS: ${{ matrix.cibw_archs }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wheels
+          path: ./dist/*.whl
+
+  build-wheels:
+    needs: [build_sdist]
+    if: ${{ needs.auto-tag.outputs.sha && inputs.deploy }}
+    name: Build wheels on ${{ matrix.os }} (${{ matrix.cibw_archs }})
+    runs-on: ${{ matrix.os }}
+    env:
+      CIBW_ARCHS_MACOS: "x86_64 arm64"
+      CIBW_SKIP: "*_i686 *-win32 pp* *-musllinux_*"
+    strategy:
+      fail-fast: ${{ inputs.fail-fast }}
+      matrix:
+        os: [ubuntu-latest]
+        cibw_archs: ["auto"]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version:  3.x
 
       - name: Install requirements
         run: |
