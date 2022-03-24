@@ -64,11 +64,11 @@ def find_version():
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        r"version\s*:\s*[\'\"]*((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)[\'\"]*",
+        r"version\s*:\s*[\'\"]*((?:0|[1-9]\d*))[\'\"]*",
         read("pybind/VERSION"), re.M
     )
     if meta_match:
-        return ".post".join([meta_match.group(1), f"{''.join(find_eumetsat_version().split('.')):}"])
+        return ".".join([find_eumetsat_version(), meta_match.group(1)])
     raise RuntimeError("Unable to find VERSION_NUMBER string.")
 
 

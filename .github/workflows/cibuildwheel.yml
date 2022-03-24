@@ -66,10 +66,10 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           source_file: ".package_version"
-          # this is the semver regex https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+          # this is the PEP 440 regex https://github.com/pypa/packaging/blob/21.3/packaging/version.py#L225
           # with a capture group (around everything), but all other groups are non capturing
           # double escape's where necessary
-          extraction_regex: "version\\s*=\\s*[\\'\"]*((?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?:[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?)[\\'\"]*"
+          extraction_regex: "version\\s*=\\s*[\\'\"]*((\\d+!)?(\\d+)(\\.\\d+)*([\\.\\-\\_])?((a(lpha)?|b(eta)?|c|r(c|ev)?|pre(view)?)\\d*)?(\\.?(post|dev)\\d*)?)[\\'\"]*"
           capture_group: 1
           tag_message: "Release"
           tag_format: "v{version}"

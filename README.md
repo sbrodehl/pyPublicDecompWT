@@ -74,6 +74,12 @@ options:
   -s FILE        Name of compressed HRIT/LRIT file
 ```
 
+## Versioning Scheme
+
+The versioning scheme of the python bindings is the PublicDecompWT version with the additional version of the python bindings.
+
+Example: version 1 of the python bindings for PublicDecompWT version 2.8.1 is 2.8.1.1
+
 [1]: https://github.com/sbrodehl/pyPublicDecompWT
 [2]: https://gitlab.eumetsat.int/open-source/PublicDecompWT
 [3]: https://github.com/sbrodehl/pyPublicDecompWT/pulls
