@@ -7,6 +7,8 @@ import codecs
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
+import pybind11
+
 HERE = os.path.abspath(os.path.dirname(__file__))
 PROJECT_URL = "https://github.com/sbrodehl/pyPublicDecompWT"
 KEYWORDS = [
@@ -111,6 +113,7 @@ class CMakeBuild(build_ext):
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-Dpybind11_DIR={pybind11.get_cmake_dir()}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
         ]
         if not sys.platform.startswith("darwin"):
