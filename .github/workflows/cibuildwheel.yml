@@ -37,7 +37,9 @@ jobs:
           python -m pip install --upgrade pip
 
       - name: Build sdist
-        run: python setup.py sdist
+        run: |
+          python -m pip install "pybind11[global]"
+          python setup.py sdist
 
       - name: Store source distribution
         uses: actions/upload-artifact@v2
