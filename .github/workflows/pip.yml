@@ -25,7 +25,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Build and install
-        run: pybind11_DIR=`pybind11-config --cmakedir` pip install --verbose .[test]
+        run: pip install --verbose .[test]
 
       - name: Run Tests
         run: cd tests && pytest
