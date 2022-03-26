@@ -11,6 +11,7 @@ set(SOURCE_FILES
         CxRITAnnotation.cpp
         ErrorHandling.h
         ErrorHandling.cpp
+        Types.h
         )
 
 if (NOT WIN32) 
@@ -19,7 +20,12 @@ SET(SOURCE_FILES ${SOURCE_FILES}
         TimeSpan.cpp
         UTCTime.h
         UTCTime.cpp
-)
+        )
+else()
+SET(SOURCE_FILES ${SOURCE_FILES}
+        MSGTime.h
+        MSGTime_impl.h
+        )
 endif()
 
 add_library(${LIBNAME} STATIC ${SOURCE_FILES})
