@@ -11,12 +11,21 @@ set(SOURCE_FILES
         CxRITAnnotation.cpp
         ErrorHandling.h
         ErrorHandling.cpp
+        )
+
+if (NOT WIN32) 
+SET(SOURCE_FILES ${SOURCE_FILES} 
         TimeSpan.h
         TimeSpan.cpp
         UTCTime.h
         UTCTime.cpp
-        )
+)
+endif()
 
-add_library(${LIBNAME} SHARED ${SOURCE_FILES})
+add_library(${LIBNAME} STATIC ${SOURCE_FILES})
 target_include_directories(${LIBNAME} PUBLIC .)
+set_property(TARGET ${LIBNAME} APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
+        $<INSTALL_INTERFACE:>  # <prefix>/
+        )
 install(TARGETS ${LIBNAME} DESTINATION .)

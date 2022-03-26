@@ -11,7 +11,7 @@ set(SOURCE_FILES
         Src/T4Decoder.cpp
         )
 
-add_library(${LIBNAME} SHARED ${SOURCE_FILES})
+add_library(${LIBNAME} STATIC ${SOURCE_FILES})
 target_link_libraries(${LIBNAME} LINK_PUBLIC "DISE" "COMP")
 target_include_directories(${LIBNAME} PUBLIC Inc)
 set_property(TARGET ${LIBNAME} APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES

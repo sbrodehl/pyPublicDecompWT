@@ -9,7 +9,7 @@ set(SOURCE_FILES
         Src/CQualityMeasures.cpp
         )
 
-add_library(${LIBNAME} SHARED ${SOURCE_FILES})
+add_library(${LIBNAME} STATIC ${SOURCE_FILES})
 target_link_libraries(${LIBNAME} LINK_PUBLIC "DISE")
 target_include_directories(${LIBNAME} PUBLIC Inc)
 set_property(TARGET ${LIBNAME} APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
