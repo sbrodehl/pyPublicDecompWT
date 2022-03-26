@@ -10,7 +10,6 @@ Currently, only bindings for the tool `xRITDecompress` are available, if you nee
 
 This repository contains / mirrors the source code for the complete [PublicDecompWT][2] tool, as well.
 Additionally, we provide CMake build files.
-We tested the tool with linux and mac-os, but did not manage to build it with windows (happy to change that, please open a [pull-request][3]!)
 
 ## Installation
 
@@ -30,6 +29,7 @@ Building from sources requires C/C++, including compiler and standard library su
 
 - C/C++ Compiler, e.g. GNU-GCC
 - `CMake`
+- `pybind11`
 
 ## Usage
 
