@@ -52,7 +52,11 @@ xRITDecompress::xRITDecompress(const py::bytes& in_buffer) {
     totalHeaderLength = decompressedFile.GetTotalHeaderLength();
     fileTypeCode = decompressedFile.GetFileTypeCode();
     auto utctime(const_cast<SYSTIME &>(decompressedFile.GetTimeStamp()));
+#ifdef WIN32
+    utctime_format = utctime.FormatDate("yyyyMMdd") + utctime.FormatTime("HHmmss");
+#else
     utctime_format = utctime.Format("%Y%m%d%H%M%S");
+#endif
     file_annotation = decompressedFile.GetAnnotation().GetText();
     decompressedFile.Write(output_buffer);
     output_buffer.seekp(0, std::ios::end);
