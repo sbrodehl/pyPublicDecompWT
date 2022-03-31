@@ -98,14 +98,14 @@ int xRITDecompress::getFileTypeCode() const {
 PYBIND11_MODULE(pyPublicDecompWT, m) {
     py::class_<xRITDecompress>(m, "xRITDecompress", py::dynamic_attr())
             .def(py::init<py::bytes&>())
-            .def("getAnnotationText", &xRITDecompress::getAnnotationText)
-            .def("getOutputLength", &xRITDecompress::getOutputLength)
-            .def("data", &xRITDecompress::data)
-            .def("getTotalHeaderLength", &xRITDecompress::getTotalHeaderLength)
-            .def("getSpectralChannelID", &xRITDecompress::getSpectralChannelID)
-            .def("getSegmentSeqNo", &xRITDecompress::getSegmentSeqNo)
-            .def("getTimeStamp", &xRITDecompress::getTimeStamp)
-            .def("getFileTypeCode", &xRITDecompress::getFileTypeCode);
+            .def("getAnnotationText", &xRITDecompress::getAnnotationText, "Returns the complete Annotation Header Record.")
+            .def("getOutputLength", &xRITDecompress::getOutputLength, "Returns the length of the decompressed output.")
+            .def("data", &xRITDecompress::data, "Returns the decompressed output.")
+            .def("getTotalHeaderLength", &xRITDecompress::getTotalHeaderLength, "Returns the accumulated length of all header records.")
+            .def("getSpectralChannelID", &xRITDecompress::getSpectralChannelID, "Returns the SEVIRI spectral channel identifier.")
+            .def("getSegmentSeqNo", &xRITDecompress::getSegmentSeqNo, "Returns the segment sequence number.")
+            .def("getTimeStamp", &xRITDecompress::getTimeStamp, "Returns the Time Stamp Header Record.")
+            .def("getFileTypeCode", &xRITDecompress::getFileTypeCode, "Returns the File Type Code Header Record.");
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(PYXRITDECOMPRESS_VERSION_INFO);
 #else
