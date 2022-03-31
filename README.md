@@ -5,8 +5,9 @@
 
 This package provides python bindings for some of [EUMETSAT’s PublicDecompWT][2] tools.
 
-With [pyPublicDecompWT][1] compressed xRIT (HRIT/LRIT) files can now be decompressed in-memory, directly with python!  
-Currently, only bindings for the tool `xRITDecompress` are available, if you need other classes / libraries please open a [pull-request][3].
+With [pyPublicDecompWT][1] compressed xRIT (HRIT/LRIT) files can now be decompressed in-memory, directly with python!
+Currently, only bindings for the tool `xRITDecompress` are available.
+If you need other classes or functionalities, please open a [pull-request][3]!
 
 This repository contains / mirrors the source code for the complete [PublicDecompWT][2] tool, as well.
 Additionally, we provide CMake build files.
@@ -36,12 +37,18 @@ Building from sources requires C/C++, including compiler and standard library su
 ```python
 from pyPublicDecompWT import xRITDecompress
 
-compressed_file = "test-data/compressed_ref/H-000-MSG4__-MSG4________-HRV______-000012___-202105260000-C_"
-with open(compressed_file, mode="rb") as fh:
-    buf = fh.read()
+# the file to decompress
+compressed_file_path = "test-data/compressed_ref/H-000-MSG4__-MSG4________-HRV______-000012___-202105260000-C_"
 
-xRIT = xRITDecompress(buf)
-uncompressed = xRIT.data()
+# Legacy decompression on disk of given file path,
+#  this will write the decompressed file to the current working directory
+xRITDecompress(compressed_file_path)
+
+# In-memory decompression of given buffer
+with open(compressed_file_path, mode="rb") as fh:
+    xRIT = xRITDecompress()
+    xRIT.decompress(fh.read())
+    uncompressed = xRIT.data()
 ```
 
 ### `xRITDecompress`
@@ -78,7 +85,7 @@ options:
 
 The versioning scheme of the python bindings is the PublicDecompWT version with the additional version of the python bindings.
 
-Example: version 1 of the python bindings for PublicDecompWT version 2.8.1 is 2.8.1.1
+Example: Version 1 of the python bindings for PublicDecompWT version 2.8.1 is 2.8.1.1
 
 [1]: https://github.com/sbrodehl/pyPublicDecompWT
 [2]: https://gitlab.eumetsat.int/open-source/PublicDecompWT
