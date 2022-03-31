@@ -72,7 +72,7 @@ def test_file_type_code():
             buf = fh.read()
             xrit = xRITDecompress(buf)
             file_type_code = xrit.getFileTypeCode()
-            assert file_type_code == 0  # TODO: Is this always the same?
+            assert file_type_code == 0  # 0 == Image data file
 
 
 def test_segment_seq_no():
