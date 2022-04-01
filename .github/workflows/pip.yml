@@ -17,15 +17,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
 
       - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Build and install
-        run: pip install --verbose .[test]
+        run: pip install --verbose .
 
-      - name: Run Tests
-        run: cd tests && pytest
+      - name: Check if import is possible
+        run: python -c "import pyPublicDecompWT"

@@ -83,6 +83,25 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_PASSWORD }}
 
+  testing:
+    needs: [build_sdist]
+    if: ${{ needs.build_sdist.outputs.sha && inputs.deploy }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: 'true'
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.x
+
+      - name: Build and install
+        run: pip install --verbose .[test]
+
+      - name: Run Tests
+        run: cd tests && pytest
+
   build-wheels:
     needs: [build_sdist]
     if: ${{ needs.build_sdist.outputs.sha && inputs.deploy }}
@@ -139,7 +158,7 @@ jobs:
   deploy:
     name: Deploy to PyPI
     runs-on: ubuntu-latest
-    needs: [build_sdist, build-wheels]
+    needs: [build_sdist, build-wheels, testing]
     if: ${{ needs.build_sdist.outputs.sha && inputs.deploy }}
     steps:
       - name: Download all the dists
