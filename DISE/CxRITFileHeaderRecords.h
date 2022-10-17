@@ -62,20 +62,14 @@ LOGIC:
 #include <iostream>
 #include <fstream>
 #include <memory>
-#include <string.h>
+#include <cstring>
 #include <deque>
 #include <vector>
 
 #include "GSDS_Volume_F_NBO.h"		// Util
-
-
-
-
 #include "CxRITAnnotation.h"		// DISE
 #include "CSpacecraftID.h"			// DISE
 #include "CSpectralChannelID.h"		// DISE
-
-
 
 
 namespace DISE
@@ -95,8 +89,6 @@ struct SPrimaryHeaderRecord
 #pragma pack(pop)
 
 
-
-
 // Encryption Key Message as contained in LRIT/HRIT Encryption Key Message Files.
 #pragma pack(push, 1)
 struct SEncryptionKeyMessage
@@ -107,8 +99,6 @@ struct SEncryptionKeyMessage
 	NBO::UNSIGNED_SHORT  m_PublicKeyCRC;
 };
 #pragma pack(pop)
-
-
 
 
 // Line Quality Entry structure.
@@ -207,8 +197,6 @@ std::ostream& operator<<
 static const std::vector<DISE::SLineQualityEntry> gs_NoLineQualityEntries;
 
 
-
-
 // File type codes as used in Primary Header Record.
 enum EFileTypeCode
 {
@@ -221,8 +209,6 @@ enum EFileTypeCode
 	e_RepeatCycleEpilogue	= 129,	// Repeat cycle epilogue file.
 	e_DCPMessage			= 130	// DCP messages file.
 };
-
-
 
 
 class CxRITFileHeaderRecords
@@ -657,8 +643,6 @@ public:
 	)
 	const;
 };
-
-
 
 
 } // end namespace

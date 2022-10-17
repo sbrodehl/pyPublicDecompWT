@@ -19,6 +19,7 @@
 #define _TIME_SPAN_H
 
 #include <sys/time.h>
+#include <ctime>
 #include <string>
 
 namespace dass {

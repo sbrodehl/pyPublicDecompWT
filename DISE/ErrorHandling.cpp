@@ -15,18 +15,16 @@
  */
 
 
-#include "ErrorHandling.h"
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
+#include <cerrno>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 
+#include "ErrorHandling.h"
 
 
 void Util::LogException(const char* file, int line)
 {
-
     std::ostringstream trcMsg;
 
     trcMsg << "Software Exception Trace (Source: "
@@ -35,10 +33,7 @@ void Util::LogException(const char* file, int line)
 	   << line 
 	   << ")";
 
-
     std::cout << trcMsg.str() << std::endl;
-
-
 };
 
 void Util::LogError(const CBaseException& excp)
@@ -50,19 +45,13 @@ void Util::LogError(const CBaseException& excp)
 	   << excp.GetErrorMessage();
    
     std::cout << trcMsg.str() << std::endl;
-
 };
 
 
 
 Util::CCLibException::CCLibException():CBaseException(errno)
 {
-//    to implement
-// get the system error message
+    // to implement
+    // get the system error message
     m_ErrorMessage = std::string(strerror(m_ErrorCode));
 }
-
-
-
-
-

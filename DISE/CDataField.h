@@ -68,7 +68,7 @@ LOGIC:
 *******************************************************************************/
 
 #include <iostream>
-#include <string.h>
+#include <cstring>
 
 #include "SmartPtr.h"		// Util
 #include "ErrorHandling.h"	// Util
@@ -188,7 +188,7 @@ CDataField (void*	i_Ptr,		// Address of an allocated memory area.
  
  /** 
   *Produces a copy of the object.
-  *  @return A copy of the object.
+  * ï¿½@return A copy of the object.
   **/
  CDataField Clone
      (
@@ -370,8 +370,6 @@ CDataField (void*	i_Ptr,		// Address of an allocated memory area.
 };
 
 
-
-
 // Container for LRIT/HRIT file data field (specific for non-compressed image data).
 // The size of the dynamic memory area can be derived from the NC, NL, and NR parameters.
 class CDataFieldUncompressedImage : public Util::CDataField
@@ -535,8 +533,6 @@ public:
 	unsigned char	GetNR() const { return m_NR; }
 
 };
-
-
 
 
 // Container for LRIT/HRIT file data field (specific for compressed image data).
@@ -730,8 +726,6 @@ inline std::ostream& operator<<
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 } // end namespace

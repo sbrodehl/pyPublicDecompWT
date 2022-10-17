@@ -55,7 +55,6 @@ LOGIC:
 *******************************************************************************/
 
 
-
 struct GP_SC_CHAN_ID
 {
 	enum E_SC_CHAN_ID
@@ -100,8 +99,6 @@ inline std::ostream& operator << (std::ostream& out, const GP_SC_CHAN_ID& gp_sc_
 
 namespace DISE
 {
-
-
 
 
 class CSpectralChannelID : public GP_SC_CHAN_ID
@@ -186,8 +183,6 @@ public:
 	}
 
 };
-
-
 
 
 } // end namespace

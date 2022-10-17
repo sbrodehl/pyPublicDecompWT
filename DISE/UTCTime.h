@@ -20,12 +20,13 @@
 
 
 #include <sys/time.h>
+#include <ctime>
+#include <string>
 
 #ifdef SUN
 struct tm *localtime_r(const time_t *timep, struct tm *result);
 #endif
 
-#include <string>
 
 namespace Util
 {

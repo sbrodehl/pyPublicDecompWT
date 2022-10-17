@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-#include <stdlib.h>
-#include <fstream>
 #include <sstream>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 #include "ErrorHandling.h"			// Util
 #include "CxRITFileHeaderRecords.h"	// DISE
 
 
-
-
 namespace DISE
 {
-
-
 
 
 std::istream& operator>>
@@ -55,8 +49,6 @@ std::istream& operator>>
 }
 
 
-
-
 std::ostream& operator<<
 (
 	std::ostream&                  i_Stream,
@@ -78,8 +70,6 @@ std::ostream& operator<<
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 void CxRITFileHeaderRecords::GetHeaderRecordSequence
@@ -213,8 +203,6 @@ const
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 std::istream& CxRITFileHeaderRecords::Read
@@ -414,8 +402,6 @@ std::istream& CxRITFileHeaderRecords::Read
 }
 
 
-
-
 std::ostream& CxRITFileHeaderRecords::Write
 (
 	std::ostream& i_Stream
@@ -550,8 +536,6 @@ const
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 std::string CxRITFileHeaderRecords::GetDisplayString
@@ -832,18 +816,6 @@ const
 		LOGCATCHANDTHROW;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 } // end namespace

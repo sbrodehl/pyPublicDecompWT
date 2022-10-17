@@ -17,7 +17,8 @@
 
 #include "UTCTime.h"
 #include "ErrorHandling.h"
-#include "string.h"
+
+#include <cstring>
 
 
 #ifdef SUN
@@ -330,11 +331,3 @@ unsigned long long  Util::CUTCTime::operator/( const CTimeSpan& d ) const
 {
     return m_Time/d;
 }
-
-/*Util::CUTCTime  Util::CUTCTime::operator/( unsigned int d ) const
-{
-    CUTCTime result;
-    result.m_Time = m_Time / d;
-    return result;
-} */
-
