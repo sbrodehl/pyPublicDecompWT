@@ -101,6 +101,7 @@ LOGIC:
 //
 #include <string>
 #include <ostream>
+#include <stdio.h>
 
 //
 // Needed for the div operator.
