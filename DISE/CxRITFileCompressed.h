@@ -60,12 +60,8 @@ LOGIC:
 #include "CxRITFile.h"		// DISE
 
 
-
-
 namespace DISE
 {
-
-
 
 
 class CxRITFileCompressed : public DISE::CxRITFile
@@ -143,8 +139,6 @@ public:
 	}
 
 };
-
-
 
 
 } // end namespace

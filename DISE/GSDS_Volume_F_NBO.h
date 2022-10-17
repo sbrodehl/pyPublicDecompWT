@@ -79,13 +79,7 @@ inline const bool isBigEndian() {
 namespace NBO
 {
 
-
-
-
 #pragma pack (push,1)
-
-
-
 
 // Structures temporarily used for byte-swapping.
 union U2 { unsigned __int16	i;	unsigned char c[2]; };
@@ -95,9 +89,6 @@ union S2 { short			i;	unsigned char c[2]; };
 union S4 { long				i;	unsigned char c[4]; };
 union R4 { float			i;	unsigned char c[4]; };
 union R8 { double			i;	unsigned char c[8]; };
-
-
-
 
 // General-purpose data types.
 
@@ -141,8 +132,6 @@ public:
 	}
 
 };
-
-
 
 
 class UNSIGNED_SHORT
@@ -213,8 +202,6 @@ public:
 	}
 
 };
-
-
 
 
 class UNSIGNED
@@ -299,9 +286,6 @@ public:
 	}
 
 };
-
-
-
 
 
 class UNSIGNED_DOUBLE
@@ -416,15 +400,11 @@ public:
 };
 
 
-
-
 typedef UNSIGNED_BYTE  BOOLEAN_BYTE;
 
 typedef UNSIGNED_BYTE  ENUMERATED_BYTE;
 typedef UNSIGNED_SHORT ENUMERATED_SHORT;
 typedef UNSIGNED       ENUMERATED_LONG;
-
-
 
 
 class INTEGER_BYTE
@@ -466,8 +446,6 @@ public:
 	}
 
 };
-
-
 
 
 class INTEGER_SHORT
@@ -538,8 +516,6 @@ public:
 	}
 
 };
-
-
 
 
 class INTEGER
@@ -626,8 +602,6 @@ public:
 };
 
 
-
-
 class REAL	// Complies with IEEE 754-1985.
 {
 
@@ -710,8 +684,6 @@ public:
 	}
 
 };
-
-
 
 
 class REAL_DOUBLE	// Complies with IEEE 754-1985.
@@ -826,8 +798,6 @@ public:
 };
 
 
-
-
 class TIME_CDS_SHORT
 {
 
@@ -916,8 +886,6 @@ public:
 };
 
 
-
-
 class TIME_CDS
 {
 
@@ -935,8 +903,6 @@ public:
 	}
 
 };
-
-
 
 
 class TIME_CDS_EXPANDED
@@ -988,8 +954,6 @@ public:
 };
 
 
-
-
 class TIME_GENERALIZED
 {
 
@@ -1019,8 +983,6 @@ public:
 	unsigned char m_[15];
 
 };
-
-
 
 
 class TIME_GENERALIZED_EXPANDED
@@ -1064,8 +1026,6 @@ public:
 };
 
 
-
-
 // Special-purpose simple data types.
 
 typedef ENUMERATED_BYTE  GP_FAC_ENV;
@@ -1074,8 +1034,6 @@ typedef ENUMERATED_BYTE  GP_SC_CHAN_ID;
 typedef ENUMERATED_SHORT GP_SC_ID;
 typedef UNSIGNED         GP_SU_ID;
 typedef ENUMERATED_BYTE  GP_SVCE_TYPE;
-
-
 
 
 // Special-purpose data structures.
@@ -1137,8 +1095,6 @@ public:
 	}
 
 };
-
-
 
 
 class GP_FI_HEADER
@@ -1214,8 +1170,6 @@ public:
 };
 
 
-
-
 class GP_FI_SH1
 {
 
@@ -1265,8 +1219,6 @@ public:
 };
 
 
-
-
 class GP_PK_HEADER
 {
 
@@ -1306,8 +1258,6 @@ public:
 };
 
 
-
-
 class GP_PK_SH1
 {
 
@@ -1342,11 +1292,7 @@ public:
 };
 
 
-
-
 #pragma pack(pop)
-
-
 
 
 } // end namespace

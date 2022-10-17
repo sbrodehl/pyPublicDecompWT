@@ -19,7 +19,7 @@
 #define _ERRORHANDLING_H_
 
 #include <string>
-#include <errno.h>
+#include <cerrno>
 
 
 namespace Util

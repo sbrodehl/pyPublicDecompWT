@@ -17,7 +17,7 @@
 
 #include "UTCTime.h"
 #include "TimeSpan.h"
-#include "ErrorHandling.h"
+
 
 Util::CTimeSpan::CTimeSpan(const CTimeSpan& t)
 {

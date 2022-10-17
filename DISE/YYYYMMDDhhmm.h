@@ -51,15 +51,13 @@ LOGIC:
 *******************************************************************************/
 
 #include <string>
+
 #include "ErrorHandling.h"	// Util
 #include "Types.h"
 
 
 namespace DISE
 {
-
-
-
 
 // Description:	Converts a 'YYYYMMDDhhmm'-formatted time string into a CMSGTime object.
 // Returns:		A CMSGTime object.
@@ -93,8 +91,6 @@ inline SYSTIME YYYYMMDDhhmm
 }
 
 
-
-
 // Description:	Converts a CMSGTime object into a 'YYYYMMDDhhmm'-formatted string.
 // Returns:		Time value as a YYYYMMDDhhmm'-formatted string.
 inline std::string YYYYMMDDhhmm
@@ -116,8 +112,6 @@ inline std::string YYYYMMDDhhmm
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 // Description:	Converts a 'YYYYMMDDhhmmss'-formatted time string into a CMSGTime object.
@@ -153,8 +147,6 @@ inline SYSTIME YYYYMMDDhhmmss
 }
 
 
-
-
 // Description:	Converts a CMSGTime object into a 'YYYYMMDDhhmmss'-formatted string.
 // Returns:		Time value as a YYYYMMDDhhmmss'-formatted string.
 inline std::string YYYYMMDDhhmmss
@@ -178,10 +170,7 @@ inline std::string YYYYMMDDhhmmss
 }
 
 
-
-
 } // end namespace
 
 
 #endif
-

@@ -158,8 +158,6 @@ namespace DISE
 {
 
 
-
-
 class CSpacecraftID : public GP_SC_ID
 {
 
@@ -217,8 +215,6 @@ public:
 	}
 
 };
-
-
 
 
 } // end namespace

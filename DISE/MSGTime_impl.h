@@ -102,7 +102,6 @@ namespace Util
 	}
 
 
-
 	///////////////////////////////////////////////////////////////
 	//
 	//	Class Name:		CMSGTime 
@@ -2009,7 +2008,7 @@ namespace Util
 								<< std::string(", Second: ")
 								<< span.GetSecondPart() 
 								<< std::string(", Millisecond: ")
-								<< span.GetMillisecondPart() << std :: endl ; 
+								<< span.GetMillisecondPart() << std :: endl ;
 		}
 		catch(...) 
 		{

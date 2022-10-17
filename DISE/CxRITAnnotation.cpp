@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-#include <iomanip>
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
+
 #include "CxRITAnnotation.h"	// DISE
-
-
 
 
 namespace DISE
 {
-
-
 
 
 // Description:	Repaces hyphens with underscores.
@@ -39,8 +35,6 @@ static void HyphenToUnderscore
 			(i = t_String.find_first_of('-')) != std::string::npos; )
 		t_String[i] = '_';
 }
-
-
 
 
 CxRITAnnotation::CxRITAnnotation
@@ -88,8 +82,6 @@ CxRITAnnotation::CxRITAnnotation
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 CxRITAnnotation::CxRITAnnotation
@@ -148,8 +140,6 @@ CxRITAnnotation::CxRITAnnotation
 }
 
 
-
-
 std::string CxRITAnnotation::GetText
 (
 )
@@ -178,8 +168,6 @@ const
 }
 
 
-
-
 std::string CxRITAnnotation::GetIdentifier
 (
 )
@@ -204,18 +192,5 @@ const
 		LOGCATCHANDTHROW;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 } // end namespace

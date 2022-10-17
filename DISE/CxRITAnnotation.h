@@ -63,12 +63,8 @@ LOGIC:
 #include "YYYYMMDDhhmm.h"			// DISE
 
 
-
-
 namespace DISE
 {
-
-
 
 
 class CxRITAnnotation
@@ -184,8 +180,6 @@ public:
 };
 
 
-
 } // end namespace
-
 
 #endif

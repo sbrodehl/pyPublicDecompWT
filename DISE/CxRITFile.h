@@ -67,12 +67,8 @@ LOGIC:
 #include "CxRITFileHeaderRecords.h"	// DISE
 
 
-
-
 namespace DISE
 {
-
-
 
 
 class CxRITFile	: public DISE::CxRITFileHeaderRecords
@@ -230,8 +226,6 @@ public:
 	const;
 
 };
-
-
 
 
 } // end namespace

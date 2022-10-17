@@ -16,22 +16,14 @@
 
 #pragma warning(disable: 4275 4786)
 
-#include <stdlib.h>
-#include <fstream>
 #include <sstream>
 #include <iostream>
+
 #include "CxRITFile.h"						// DISE
 
 
 namespace DISE
 {
-
-
-
-
-//Util::CSmartCriticalSection CxRITFile::ms_LockFileIO;
-
-
 
 
 CxRITFile::CxRITFile
@@ -69,8 +61,6 @@ CxRITFile::CxRITFile
 , m_DataField			(i_DataField						)
 {
 }
-
-
 
 
 CxRITFile::CxRITFile
@@ -127,8 +117,6 @@ CxRITFile::CxRITFile
 }
 
 
-
-
 CxRITFile::CxRITFile
 (
 	std::istream& i_Stream
@@ -147,8 +135,6 @@ CxRITFile::CxRITFile
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 CxRITFile::CxRITFile
@@ -174,16 +160,12 @@ CxRITFile::CxRITFile
 }
 
 
-
-
 CxRITFile::CxRITFile
 (
 )
 : CxRITFileHeaderRecords()
 {
 }
-
-
 
 
 std::ostream& CxRITFile::WriteHeaderRecords
@@ -205,8 +187,6 @@ const
 }
 
 
-
-
 std::ostream& CxRITFile::Write
 (
 	std::ostream&	i_Stream
@@ -225,8 +205,6 @@ const
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 void CxRITFile::Write
@@ -251,8 +229,6 @@ const
 		LOGCATCHANDTHROW;
 	}
 }
-
-
 
 
 bool CxRITFile::Subtract
@@ -339,10 +315,6 @@ const
 		LOGCATCHANDTHROW;
 	}
 }
-
-
-
-
 
 
 } // end namespace

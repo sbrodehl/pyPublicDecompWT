@@ -100,7 +100,7 @@ LOGIC:
 // STL Includes
 //
 #include <string>
-
+#include <iostream>
 
 //
 // Needed for the div operator.
@@ -657,9 +657,6 @@ namespace Util
 			 //		bool		Outcome of the comparison
 			 bool operator >= (const CMSGTime& i_Time) const;
 
-			
-		
-		
 	};
 
 } // end of the namespace
@@ -908,8 +905,6 @@ namespace Util
 		// Argument
 		//		i_CTimeSpan		The timspan to operate on
 		 CMSGTimeSpan& operator -= (const CMSGTimeSpan& i_cTimeSpan);
-		
-
 
 		// Description
 		//		numerical operator 
@@ -935,7 +930,6 @@ namespace Util
 		//		multiplier		The multiplier to apply
 		 CMSGTimeSpan operator / (int multiplier )				  const;
 		
-
 		// Description
 		//		Boolean comparators.
 		// Argument
@@ -976,7 +970,6 @@ namespace Util
 		static CMSGTimeSpan& Second();
 		static CMSGTimeSpan& Millisecond();
 
-	
 	 };
 } // end of the namspace 
 
@@ -1093,8 +1086,6 @@ namespace Util
 	//		o_wDay			Day Value
 	//		i_wDayOfYear	Day of the Year Answer
 	void MonthDayToDayOfYear(WORD i_wYear, WORD o_wMonth, WORD o_wDay,WORD& i_wDayOfYear);
-
-
 
 } // end of the namespace
 
