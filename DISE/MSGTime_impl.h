@@ -1988,7 +1988,7 @@ namespace Util
 	  {	
 		try
 		{
-			return o_Stream << time.FormatTime() << std::string(" ") << time.FormatDate() << '\n' << std::flush ;
+			return o_Stream << time.FormatTime() << std::string(" ") << time.FormatDate() << std::string("\n") << std::flush ;
 		}
 		catch(...) 
 		{
@@ -2008,7 +2008,7 @@ namespace Util
 								<< std::string(", Second: ")
 								<< span.GetSecondPart() 
 								<< std::string(", Millisecond: ")
-								<< span.GetMillisecondPart() << '\n' << std::flush ;
+								<< span.GetMillisecondPart() << std::string("\n") << std::flush ;
 		}
 		catch(...) 
 		{
