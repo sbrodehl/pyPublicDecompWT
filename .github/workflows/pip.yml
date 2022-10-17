@@ -1,5 +1,9 @@
 name: "Pip"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
   pull_request:
@@ -16,9 +20,9 @@ jobs:
         python-version: ["3.x"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
