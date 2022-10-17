@@ -100,6 +100,7 @@ LOGIC:
 // STL Includes
 //
 #include <string>
+#include <ostream>
 
 //
 // Needed for the div operator.
