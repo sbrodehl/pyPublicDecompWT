@@ -14,7 +14,7 @@ Additionally, we provide CMake build files.
 
 ## Installation
 
-Install pyxRITDecompress via pip:
+Install pyPublicDecompWT via pip:
 ```bash
 pip install pyPublicDecompWT
 ```
