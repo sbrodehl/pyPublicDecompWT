@@ -1,5 +1,9 @@
 name: "Pip"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
   pull_request:
