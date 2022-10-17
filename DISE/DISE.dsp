@@ -141,19 +141,7 @@ SOURCE=.\ErrorHandling.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GSDS_Volume_F.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GSDS_Volume_F_Impl.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\GSDS_Volume_F_NBO.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GSDS_Volume_F_NBO_impl.h
 # End Source File
 # Begin Source File
 
