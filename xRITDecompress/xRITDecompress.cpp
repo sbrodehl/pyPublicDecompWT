@@ -51,114 +51,100 @@ LOGIC:
 
 #include <stdio.h>
 
-#include "ErrorHandling.h"			// Util
-#include "CxRITFile.h"				// DISE
-#include "CxRITFileDecompressed.h"	// DISE
+#include "ErrorHandling.h"          // Util
+#include "CxRITFile.h"              // DISE
+#include "CxRITFileDecompressed.h"  // DISE
 
 
-const char* VERSION_NUMBER="2.8.1";
+const char *VERSION_NUMBER = "2.8.1";
 
 // Description:	Tells the correct command line syntax.
 // Returns:		Nothing.
-void Usage
-(
-	const std::string& i_ProgramName
-)
-{
-	std::cout << "Usage: " << i_ProgramName << 
-		" [-s:]<Name of compressed HRIT/LRIT file>"
-		" [--help]"
-		" [--version]"
-		"\n";
+void Usage(const std::string &i_ProgramName) {
+    std::cout << "Usage: " << i_ProgramName <<
+              " [-s:]<Name of compressed HRIT/LRIT file>"
+              " [--help]"
+              " [--version]"
+              "\n";
 }
 
 struct Parameters {
-	char* sourceFile;
-	bool versionRequested;
-	bool helpRequested;
-	int errorCode;
+    char *sourceFile;
+    bool versionRequested;
+    bool helpRequested;
+    int errorCode;
 };
 
 // Description:	Parses the parameters.
 // Returns:		true when processing should be halted (either help or version requested or errors found)
-bool getParameters(int argc, char* argv[], Parameters* params) {
-	params->sourceFile = NULL;
-	params->versionRequested = false;
-	params->helpRequested = false;
-	params->errorCode=0;
-	
-	for (int i=1; i<argc; i++) {
-		if (!strncmp(argv[i], "-s:", strlen("-s:"))) {
-			params->sourceFile = argv[i] + strlen("-s:");
-		} else if (!strcmp(argv[i], "--version")) {
-			params->versionRequested = true;
-		} else if (!strcmp(argv[i], "--help")) {
-			params->helpRequested = true;
-		} else if (params->sourceFile == NULL) {
-			params->sourceFile = argv[i];
-		} else {
-			std::cerr << "Invalid usage\n";
-			Usage(argv[0]);
-			params->errorCode=1;
-			return true;
-		}
-	}
-	if (params->helpRequested) {
-		Usage(argv[0]);
-		params->errorCode=0;
-		return true;
-	} else if (params->versionRequested) {
-		std::cout << "Version: " << VERSION_NUMBER << "\n";
-		params->errorCode=0;
-		return true;
-	} else if (params->sourceFile == NULL) {
-		std::cerr << "No HRIT/LRIT file specified\n";
-		Usage(argv[0]);
-		params->errorCode=1;
-		return true;
-	} else {
-		return false;
-	}
+bool getParameters(int argc, char *argv[], Parameters *params) {
+    params->sourceFile = NULL;
+    params->versionRequested = false;
+    params->helpRequested = false;
+    params->errorCode = 0;
+
+    for (int i = 1; i < argc; i++) {
+        if (!strncmp(argv[i], "-s:", strlen("-s:"))) {
+            params->sourceFile = argv[i] + strlen("-s:");
+        } else if (!strcmp(argv[i], "--version")) {
+            params->versionRequested = true;
+        } else if (!strcmp(argv[i], "--help")) {
+            params->helpRequested = true;
+        } else if (params->sourceFile == NULL) {
+            params->sourceFile = argv[i];
+        } else {
+            std::cerr << "Invalid usage\n";
+            Usage(argv[0]);
+            params->errorCode = 1;
+            return true;
+        }
+    }
+    if (params->helpRequested) {
+        Usage(argv[0]);
+        params->errorCode = 0;
+        return true;
+    } else if (params->versionRequested) {
+        std::cout << "Version: " << VERSION_NUMBER << "\n";
+        params->errorCode = 0;
+        return true;
+    } else if (params->sourceFile == NULL) {
+        std::cerr << "No HRIT/LRIT file specified\n";
+        Usage(argv[0]);
+        params->errorCode = 1;
+        return true;
+    } else {
+        return false;
+    }
 }
-
-
 
 
 // Description:	Entry function of program.
 // Returns:		0 on success,
 //				1 on error on parameters.
 //				2 on error on execution.
-int main
-(
-	int   argc,
-	char* argv[]
-)
-{
-	Parameters params;
-	bool halt = getParameters(argc, argv, &params);
-	if (halt) {
-		return params.errorCode;
-	}
-	
-	// Open input file.
-	DISE::CxRITFile compressedFile;
-	try
-	{
-		compressedFile = DISE::CxRITFile(params.sourceFile);
-	}
-	catch (...)
-	{
-		std::cerr << "Opening/reading input file failed.\n";
-		Usage(argv[0]);
-		return 1;
-	}
+int main(int argc, char *argv[]) {
+    Parameters params;
+    bool halt = getParameters(argc, argv, &params);
+    if (halt) {
+        return params.errorCode;
+    }
 
-	// Decompress input file.
-	DISE::CxRITFileDecompressed decompressedFile(compressedFile);
+    // Open input file.
+    DISE::CxRITFile compressedFile;
+    try {
+        compressedFile = DISE::CxRITFile(params.sourceFile);
+    } catch (...) {
+        std::cerr << "Opening/reading input file failed.\n";
+        Usage(argv[0]);
+        return 1;
+    }
 
-	// Store decompressed file.
-	decompressedFile.Write(decompressedFile.GetAnnotation().GetText());
-	std::cout << "Decompressed file: " << decompressedFile.GetAnnotation().GetText() << "\n";
+    // Decompress input file.
+    DISE::CxRITFileDecompressed decompressedFile(compressedFile);
 
-	return 0;
+    // Store decompressed file.
+    decompressedFile.Write(decompressedFile.GetAnnotation().GetText());
+    std::cout << "Decompressed file: " << decompressedFile.GetAnnotation().GetText() << "\n";
+
+    return 0;
 }
