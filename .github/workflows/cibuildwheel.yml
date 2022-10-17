@@ -58,7 +58,7 @@ jobs:
         run: echo 'version='`pip show pyPublicDecompWT | grep "Version:" | cut -c 10-` > .package_version
 
       - name: Autoadd release Tags
-        uses: sbrodehl/action-autotag@v2.0.0
+        uses: sbrodehl/action-autotag@v2
         id: autotag
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
