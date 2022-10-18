@@ -9,3 +9,4 @@ set(SOURCE_FILES xRITDecompress.cpp)
 
 add_executable(${EXENAME} ${SOURCE_FILES})
 target_link_libraries(${EXENAME} LINK_PUBLIC "DISE" "COMP" "JPEG" "WT" "T4")
+install(TARGETS ${EXENAME} DESTINATION bin)
