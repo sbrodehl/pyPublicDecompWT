@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
   schedule:
-    - cron: '0 6 * * */4'
+    - cron: '0 5 3,17 * *'
 
 jobs:
   CIBW:
