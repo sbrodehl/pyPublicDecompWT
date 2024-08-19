@@ -110,7 +110,8 @@ unsigned long Util::CUTCTime :: GetDayOfWeek() const
     try
     {
         long sec =  m_Time/Util::CTimeSpan::Second();
-        tm* t_Time = localtime( &sec );
+        std::time_t l_temp = sec;
+        tm* t_Time = localtime( &l_temp );
         unsigned long l_Time =  t_Time->tm_wday;
         return l_Time;
     }
