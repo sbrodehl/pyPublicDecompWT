@@ -272,7 +272,8 @@ std::string Util::CUTCTime::Format(const std::string& Spec)
 	memset( tmp, '0', 64 );
     struct tm tm;
     long sec =  m_Time/Util::CTimeSpan::Second();
-    ::localtime_r(&sec, &tm);
+    std::time_t l_temp = sec;
+    ::localtime_r(&l_temp, &tm);
 
     size_t ret=strftime( tmp ,64, Spec.c_str(),&tm);
     if(ret == 0) return std::string("Format time failed");
