@@ -142,11 +142,10 @@ unsigned long Util::CUTCTime :: GetDayOfYear() const
 {
     try
     {
-        unsigned long l_Time;
-        tm *t_Time;
         long sec =  m_Time/Util::CTimeSpan::Second();
-        t_Time = localtime(&sec);
-        l_Time =  t_Time->tm_yday;
+        std::time_t l_temp = sec;
+        tm* t_Time = localtime( &l_temp );
+        unsigned long l_Time =  t_Time->tm_yday;
         return l_Time;
 
     }
@@ -161,11 +160,10 @@ unsigned long Util::CUTCTime :: GetMonth() const
 
     try
     {
-        unsigned long l_Time;
-        tm *t_Time;
         long sec =  m_Time/Util::CTimeSpan::Second();
-        t_Time = localtime(&sec);
-        l_Time =  t_Time->tm_mon+1;
+        std::time_t l_temp = sec;
+        tm* t_Time = localtime( &l_temp );
+        unsigned long l_Time =  t_Time->tm_mon+1;
         return l_Time;
 
     }
@@ -181,11 +179,10 @@ unsigned long Util::CUTCTime :: GetYear() const
 
     try
     {
-        unsigned long l_Time;
-        tm *t_Time;
         long sec =  m_Time/Util::CTimeSpan::Second();
-        t_Time = localtime(&sec);
-        l_Time =  t_Time->tm_year + 1900;
+        std::time_t l_temp = sec;
+        tm* t_Time = localtime( &l_temp );
+        unsigned long l_Time =  t_Time->tm_year + 1900;
         return l_Time;
     }
     catch(...)
