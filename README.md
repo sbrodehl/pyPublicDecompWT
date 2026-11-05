@@ -87,6 +87,19 @@ The versioning scheme of the python bindings is the PublicDecompWT version with 
 
 Example: Version 1 of the python bindings for PublicDecompWT version 2.8.1 is 2.8.1.1
 
+## Development & Testing
+
+The reference files are stored with Git LFS. Fetch their actual contents before running the tests:
+
+```bash
+git lfs pull
+python -m pip install ".[test]"
+python -m pytest tests
+```
+
+Tests fail if fixtures are missing or still contain Git LFS pointers.
+Legacy file-output and CLI tests use temporary directories.
+
 [1]: https://github.com/sbrodehl/pyPublicDecompWT
 [2]: https://gitlab.eumetsat.int/open-source/PublicDecompWT
 [3]: https://github.com/sbrodehl/pyPublicDecompWT/pulls

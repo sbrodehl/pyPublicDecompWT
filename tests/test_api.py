@@ -1,6 +1,17 @@
 from pathlib import Path
 
+import pytest
+
 from pyPublicDecompWT import xRITDecompress
+
+TEST_DATA = Path(__file__).resolve().parents[1] / "test-data"
+COMPRESSED_FILES = sorted((TEST_DATA / "compressed_ref").glob("*-C_"))
+UNCOMPRESSED_FILES = sorted((TEST_DATA / "uncompressed_ref").glob("*-__"))
+LFS_POINTER = b"version https://git-lfs.github.com/spec/v1"
+
+assert COMPRESSED_FILES, "Missing compressed test data; fetch the Git LFS fixtures."
+assert UNCOMPRESSED_FILES, "Missing uncompressed test data; fetch the Git LFS fixtures."
+
 
 E_SC_CHAN_ID = {
     "NO_CHANNEL": 0,
@@ -20,100 +31,59 @@ E_SC_CHAN_ID = {
 }
 
 
-def test_legacy_decompression():
-    compressed_dir = Path("../test-data/compressed_ref")
-    uncompressed_dir = Path("../test-data/uncompressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        uc_pt = next(iter(uncompressed_dir.glob(f"{c_pt.name[:-2]}*")))
-        xrit = xRITDecompress(str(c_pt))
-        pyxrit_uc_pt = Path(xrit.getAnnotationText())
-        assert pyxrit_uc_pt.exists()
-        with open(pyxrit_uc_pt, mode="rb") as fh:
-            pyxrit_un_buf = fh.read()
-        with open(uc_pt, mode="rb") as fh:
-            un_buf = fh.read()
-        assert pyxrit_un_buf == un_buf
-        pyxrit_uc_pt.unlink()
-        assert not pyxrit_uc_pt.exists()
+def read_fixture(path):
+    data = path.read_bytes()
+    assert not data.startswith(LFS_POINTER), f"Fetch the Git LFS content for {path}."
+    return data
 
 
-def test_inmemory_decompression():
-    compressed_dir = Path("../test-data/compressed_ref")
-    uncompressed_dir = Path("../test-data/uncompressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        uc_pt = next(iter(uncompressed_dir.glob(f"{c_pt.name[:-2]}*")))
-        with open(c_pt, mode="rb") as fh:
-            buf = fh.read()
-            xrit = xRITDecompress()
-            xrit.decompress(buf)
-            pyxrit_un_buf = xrit.data()
-        with open(uc_pt, mode="rb") as fh:
-            un_buf = fh.read()
-        assert pyxrit_un_buf == un_buf
+@pytest.fixture(scope="module", params=COMPRESSED_FILES, ids=lambda path: path.name)
+def reference(request):
+    path = request.param
+    expected_path = TEST_DATA / "uncompressed_ref" / path.name.replace("-C_", "-__")
+    return path, read_fixture(path), read_fixture(expected_path)
 
 
-def test_output_length():
-    compressed_dir = Path("../test-data/compressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        with open(c_pt, mode="rb") as fh:
-            buf = fh.read()
-            xrit = xRITDecompress()
-            xrit.decompress(buf)
-            pyxrit_un_buf = xrit.data()
-            output_length = xrit.getOutputLength()
-            assert len(pyxrit_un_buf) == output_length
+@pytest.fixture
+def decoded(reference):
+    xrit = xRITDecompress()
+    xrit.decompress(reference[1])
+    return xrit
 
 
-def test_annotation_text():
-    compressed_dir = Path("../test-data/compressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        with open(c_pt, mode="rb") as fh:
-            buf = fh.read()
-            xrit = xRITDecompress()
-            xrit.decompress(buf)
-            annotation_text = xrit.getAnnotationText()
-            assert annotation_text == c_pt.name.replace("-C_", "-__")
+def test_legacy_decompression(reference, tmp_path, monkeypatch):
+    path, _, expected = reference
+    monkeypatch.chdir(tmp_path)
+    xrit = xRITDecompress(str(path))
+    output_path = Path(xrit.getAnnotationText())
+    assert output_path.read_bytes() == expected
 
 
-def test_total_header_length():
-    compressed_dir = Path("../test-data/compressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        with open(c_pt, mode="rb") as fh:
-            buf = fh.read()
-            xrit = xRITDecompress()
-            xrit.decompress(buf)
-            total_header_length = xrit.getTotalHeaderLength()
-            assert total_header_length == 49584  # TODO: Is this always the same?
+def test_inmemory_decompression(reference, decoded):
+    assert decoded.data() == reference[2]
 
 
-def test_file_type_code():
-    compressed_dir = Path("../test-data/compressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        with open(c_pt, mode="rb") as fh:
-            buf = fh.read()
-            xrit = xRITDecompress()
-            xrit.decompress(buf)
-            file_type_code = xrit.getFileTypeCode()
-            assert file_type_code == 0  # 0 == Image data file
+def test_output_length(reference, decoded):
+    output = decoded.data()
+    assert decoded.getOutputLength() == len(output) == len(reference[2])
 
 
-def test_segment_seq_no():
-    compressed_dir = Path("../test-data/compressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        with open(c_pt, mode="rb") as fh:
-            buf = fh.read()
-            xrit = xRITDecompress()
-            xrit.decompress(buf)
-            segment_seq_no = xrit.getSegmentSeqNo()
-            assert segment_seq_no == int(c_pt.name.split('-')[-3].replace("_", ""))
+def test_annotation_text(reference, decoded):
+    assert decoded.getAnnotationText() == reference[0].name.replace("-C_", "-__")
 
 
-def test_spectral_channel_id():
-    compressed_dir = Path("../test-data/compressed_ref")
-    for c_pt in compressed_dir.glob("*-C_"):
-        with open(c_pt, mode="rb") as fh:
-            buf = fh.read()
-            xrit = xRITDecompress()
-            xrit.decompress(buf)
-            spectral_channel_id = xrit.getSpectralChannelID()
-            assert spectral_channel_id == E_SC_CHAN_ID[c_pt.name.split('-')[-4].replace('_', '')]
+def test_total_header_length(decoded):
+    assert decoded.getTotalHeaderLength() == 49584  # Bits, for these reference files.
+
+
+def test_file_type_code(decoded):
+    assert decoded.getFileTypeCode() == 0  # Image data file.
+
+
+def test_segment_seq_no(reference, decoded):
+    assert decoded.getSegmentSeqNo() == int(reference[0].name.split("-")[-3].replace("_", ""))
+
+
+def test_spectral_channel_id(reference, decoded):
+    channel = reference[0].name.split("-")[-4].replace("_", "")
+    assert decoded.getSpectralChannelID() == E_SC_CHAN_ID[channel]
