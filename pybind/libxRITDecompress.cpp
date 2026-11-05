@@ -133,7 +133,7 @@ PYBIND11_MODULE(pyPublicDecompWT, m) {
             .def("getTimeStamp", &xRITDecompress::getTimeStamp, "Returns the Time Stamp Header Record.")
             .def("getFileTypeCode", &xRITDecompress::getFileTypeCode, "Returns the File Type Code Header Record.");
 #ifdef VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(PYXRITDECOMPRESS_VERSION_INFO);
+    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
 #else
     m.attr("__version__") = "dev";
 #endif

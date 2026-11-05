@@ -7,6 +7,10 @@ set(SOURCE_FILES libxRITDecompress.cpp)
 
 pybind11_add_module(${LIBNAME} MODULE ${SOURCE_FILES})
 target_link_libraries(${LIBNAME} PRIVATE "DISE" "COMP" "JPEG" "WT" "T4")
-target_compile_definitions(${LIBNAME} PRIVATE VERSION_INFO=${PROJECT_VERSION})
+if(NOT DEFINED PYXRITDECOMPRESS_VERSION_INFO)
+    # Fallback if PYXRITDECOMPRESS_VERSION_INFO is not set during build via setup.py
+    set(PYXRITDECOMPRESS_VERSION_INFO "${PROJECT_VERSION}")
+endif()
+target_compile_definitions(${LIBNAME} PRIVATE VERSION_INFO=${PYXRITDECOMPRESS_VERSION_INFO})
 
 install(TARGETS ${LIBNAME} DESTINATION .)
