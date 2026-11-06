@@ -1,6 +1,8 @@
 #include <iostream>
 #include <istream>
-#include <sstream>
+#include <limits>
+#include <ostream>
+#include <stdexcept>
 #include <streambuf>
 #include <utility>
 
@@ -24,6 +26,19 @@ class InputBuffer : public std::streambuf {
 public:
     InputBuffer(char *data, std::size_t size) {
         setg(data, data, data + size);
+    }
+};
+
+// Write into a fresh, private Python bytes allocation. The bounded put area
+// makes an unexpected length mismatch fail instead of overrunning the buffer.
+class OutputBuffer : public std::streambuf {
+public:
+    OutputBuffer(char *data, std::size_t size) {
+        setp(data, data + size);
+    }
+
+    std::size_t size() const {
+        return static_cast<std::size_t>(pptr() - pbase());
     }
 };
 
@@ -112,11 +127,30 @@ unsigned long long xRITDecompress::getOutputLength() const {
 
 py::bytes xRITDecompress::data() {
     if (!output_cache) {
-        std::ostringstream output_buffer;
-        decompressed_file.Write(output_buffer);
-        const auto output = output_buffer.str();
-        output_length = output.size();
-        output_cache = py::bytes(output);
+        const auto bits = decompressed_file.GetTotalLength();
+        const auto size = bits / 8 + (bits % 8 != 0);
+        if (size > static_cast<unsigned long long>(std::numeric_limits<Py_ssize_t>::max())) {
+            throw std::overflow_error("Decompressed output is too large for Python bytes.");
+        }
+
+        auto result = py::reinterpret_steal<py::bytes>(
+                PyBytes_FromStringAndSize(nullptr, static_cast<Py_ssize_t>(size)));
+        if (!result) {
+            throw py::error_already_set();
+        }
+        char *output_data = PyBytes_AsString(result.ptr());
+        if (!output_data) {
+            throw py::error_already_set();
+        }
+        OutputBuffer output_buffer(output_data, static_cast<std::size_t>(size));
+        std::ostream out_stream(&output_buffer);
+        decompressed_file.Write(out_stream);
+        if (output_buffer.size() != size) {
+            throw std::runtime_error("Serialized output length does not match the file headers.");
+        }
+
+        output_length = size;
+        output_cache = std::move(result);
     }
     return py::reinterpret_borrow<py::bytes>(output_cache);
 }
