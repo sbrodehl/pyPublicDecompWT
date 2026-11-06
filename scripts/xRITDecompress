@@ -22,9 +22,11 @@ if len(source_files) == 0:
 
 for fn in source_files:
     pt = Path(fn).resolve()
-    assert pt.exists()
+    if not pt.is_file():
+        parser.error(f"Input file does not exist or is not a regular file: {fn}")
+    xrit = xRITDecompress()
     with open(pt, mode="rb") as fh:
-        xrit = xRITDecompress(fh.read())
+        xrit.decompress(fh.read())
 
     with open(pt.with_name(xrit.getAnnotationText()), mode="wb") as fh:
         fh.write(xrit.data())
