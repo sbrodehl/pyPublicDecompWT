@@ -2,8 +2,7 @@
 #include <istream>
 #include <sstream>
 #include <streambuf>
-#include <cstring>
-#include <memory>
+#include <utility>
 
 #include <pybind11/pybind11.h>
 
@@ -14,6 +13,21 @@
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
 namespace py = pybind11;
+
+namespace {
+
+// The core parser reads sequentially. Exposing only the get area lets it read
+// the Python bytes directly without copying them into a temporary std::string.
+// The argument owns the memory for the duration of decompress(), with the GIL
+// held throughout; this stream never writes to that immutable input.
+class InputBuffer : public std::streambuf {
+public:
+    InputBuffer(char *data, std::size_t size) {
+        setg(data, data, data + size);
+    }
+};
+
+} // namespace
 
 class xRITDecompress {
 public:
@@ -54,9 +68,15 @@ void xRITDecompress::to_file() {
 
 void xRITDecompress::decompress(const py::bytes& in_buffer) {
     DISE::CxRITFile compressedFile;
+    char *input_data;
+    Py_ssize_t input_size;
+    if (PyBytes_AsStringAndSize(in_buffer.ptr(), &input_data, &input_size) != 0) {
+        throw py::error_already_set();
+    }
     try {
-        if (len(in_buffer) > 0) {
-            std::istringstream in_stream(in_buffer);
+        if (input_size > 0) {
+            InputBuffer input_buffer(input_data, static_cast<std::size_t>(input_size));
+            std::istream in_stream(&input_buffer);
             compressedFile = DISE::CxRITFile(in_stream);
         } else if (!file_name.empty()) {
             compressedFile = DISE::CxRITFile(file_name);
@@ -132,7 +152,7 @@ PYBIND11_MODULE(pyPublicDecompWT, m) {
             .def(py::init<std::string&>(), "", pybind11::arg("file_path") = "")
             .def("getAnnotationText", &xRITDecompress::getAnnotationText, "Returns the complete Annotation Header Record.")
             .def("getOutputLength", &xRITDecompress::getOutputLength, "Returns the length of the decompressed output.")
-            .def("decompress", &xRITDecompress::decompress, "Decompresses file or given buffer.", pybind11::arg("in_buffer") = "")
+            .def("decompress", &xRITDecompress::decompress, "Decompresses file or given buffer.", pybind11::arg("in_buffer") = py::bytes())
             .def("data", &xRITDecompress::data, "Returns the decompressed output.")
             .def("getTotalHeaderLength", &xRITDecompress::getTotalHeaderLength, "Returns the accumulated length of all header records.")
             .def("getSpectralChannelID", &xRITDecompress::getSpectralChannelID, "Returns the SEVIRI spectral channel identifier.")
