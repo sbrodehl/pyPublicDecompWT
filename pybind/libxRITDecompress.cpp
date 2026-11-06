@@ -1,6 +1,7 @@
 #include <iostream>
 #include <istream>
 #include <limits>
+#include <memory>
 #include <ostream>
 #include <stdexcept>
 #include <streambuf>
@@ -18,10 +19,66 @@ namespace py = pybind11;
 
 namespace {
 
-// The core parser reads sequentially. Exposing only the get area lets it read
-// the Python bytes directly without copying them into a temporary std::string.
-// The argument owns the memory for the duration of decompress(), with the GIL
-// held throughout; this stream never writes to that immutable input.
+#if PY_VERSION_HEX >= 0x030F0000
+class PythonBytesOutput {
+public:
+    explicit PythonBytesOutput(Py_ssize_t size)
+        : writer(PyBytesWriter_Create(size)) {
+        if (!writer) {
+            throw py::error_already_set();
+        }
+    }
+
+    char *data() const {
+        return static_cast<char *>(PyBytesWriter_GetData(writer.get()));
+    }
+
+    py::bytes finish() {
+        auto result = py::reinterpret_steal<py::bytes>(
+                PyBytesWriter_Finish(writer.release()));
+        if (!result) {
+            throw py::error_already_set();
+        }
+        return result;
+    }
+
+private:
+    struct DiscardWriter {
+        void operator()(PyBytesWriter *value) const {
+            PyBytesWriter_Discard(value);
+        }
+    };
+    std::unique_ptr<PyBytesWriter, DiscardWriter> writer;
+};
+#else
+class PythonBytesOutput {
+public:
+    explicit PythonBytesOutput(Py_ssize_t size)
+        : result(py::reinterpret_steal<py::bytes>(
+                PyBytes_FromStringAndSize(nullptr, size))) {
+        if (!result) {
+            throw py::error_already_set();
+        }
+    }
+
+    char *data() const {
+        char *buffer = PyBytes_AsString(result.ptr());
+        if (!buffer) {
+            throw py::error_already_set();
+        }
+        return buffer;
+    }
+
+    py::bytes finish() {
+        return std::move(result);
+    }
+
+private:
+    py::bytes result;
+};
+#endif
+
+
 class InputBuffer : public std::streambuf {
 public:
     InputBuffer(char *data, std::size_t size) {
@@ -29,8 +86,6 @@ public:
     }
 };
 
-// Write into a fresh, private Python bytes allocation. The bounded put area
-// makes an unexpected length mismatch fail instead of overrunning the buffer.
 class OutputBuffer : public std::streambuf {
 public:
     OutputBuffer(char *data, std::size_t size) {
@@ -129,26 +184,20 @@ py::bytes xRITDecompress::data() {
     if (!output_cache) {
         const auto bits = decompressed_file.GetTotalLength();
         const auto size = bits / 8 + (bits % 8 != 0);
-        if (size > static_cast<unsigned long long>(std::numeric_limits<Py_ssize_t>::max())) {
+        if (size > static_cast<unsigned long long>((std::numeric_limits<Py_ssize_t>::max)())) {
             throw std::overflow_error("Decompressed output is too large for Python bytes.");
         }
 
-        auto result = py::reinterpret_steal<py::bytes>(
-                PyBytes_FromStringAndSize(nullptr, static_cast<Py_ssize_t>(size)));
-        if (!result) {
-            throw py::error_already_set();
+        PythonBytesOutput output(static_cast<Py_ssize_t>(size));
+        {
+            OutputBuffer output_buffer(output.data(), static_cast<std::size_t>(size));
+            std::ostream out_stream(&output_buffer);
+            decompressed_file.Write(out_stream);
+            if (!out_stream || output_buffer.size() != size) {
+                throw std::runtime_error("Serialized output length does not match the file headers.");
+            }
         }
-        char *output_data = PyBytes_AsString(result.ptr());
-        if (!output_data) {
-            throw py::error_already_set();
-        }
-        OutputBuffer output_buffer(output_data, static_cast<std::size_t>(size));
-        std::ostream out_stream(&output_buffer);
-        decompressed_file.Write(out_stream);
-        if (output_buffer.size() != size) {
-            throw std::runtime_error("Serialized output length does not match the file headers.");
-        }
-
+        auto result = output.finish();
         output_length = size;
         output_cache = std::move(result);
     }
