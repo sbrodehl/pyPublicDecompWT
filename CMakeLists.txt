@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.19)
+cmake_minimum_required(VERSION 3.18...3.31)
 set(PROJNAME "PublicDecompWT")
 project(${PROJNAME} VERSION "2.8.1")
 
@@ -8,12 +8,19 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Preserve the old CMake command-line option while using modern FindPython.
+if(DEFINED PYTHON_EXECUTABLE AND NOT DEFINED Python_EXECUTABLE)
+    set(Python_EXECUTABLE "${PYTHON_EXECUTABLE}")
+endif()
+find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
+set(PYBIND11_FINDPYTHON ON)
+
 if(SKBUILD)
     # Scikit-Build does not add your site-packages to the search path
     # automatically, so we need to add it _or_ the pybind11 specific directory
     # here.
     execute_process(
-            COMMAND "${PYTHON_EXECUTABLE}" -c
+            COMMAND "${Python_EXECUTABLE}" -c
             "import pybind11; print(pybind11.get_cmake_dir())"
             OUTPUT_VARIABLE _tmp_dir
             OUTPUT_STRIP_TRAILING_WHITESPACE COMMAND_ECHO STDOUT)

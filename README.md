@@ -29,7 +29,7 @@ python -c "import pyPublicDecompWT"
 Building from sources requires C/C++, including compiler and standard library support.
 
 - C/C++ Compiler, e.g. GNU-GCC
-- `CMake`
+- `CMake` 3.18 or newer
 - `pybind11`
 
 ## Usage
