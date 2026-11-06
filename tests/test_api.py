@@ -87,3 +87,23 @@ def test_segment_seq_no(reference, decoded):
 def test_spectral_channel_id(reference, decoded):
     channel = reference[0].name.split("-")[-4].replace("_", "")
     assert decoded.getSpectralChannelID() == E_SC_CHAN_ID[channel]
+
+
+def test_repeated_data_does_not_append(reference, decoded):
+    first = decoded.data()
+    assert isinstance(first, bytes)
+    for _ in range(3):
+        repeated = decoded.data()
+        assert repeated is first
+        assert repeated == reference[2]
+        assert decoded.getOutputLength() == len(first)
+
+
+@pytest.mark.parametrize("path", UNCOMPRESSED_FILES, ids=lambda path: path.name)
+def test_uncompressed_passthrough(path):
+    expected = read_fixture(path)
+    xrit = xRITDecompress()
+    xrit.decompress(expected)
+    assert xrit.data() == expected
+    assert xrit.data() == expected
+    assert xrit.getOutputLength() == len(expected)

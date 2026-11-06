@@ -1,5 +1,6 @@
 #include <iostream>
 #include <istream>
+#include <sstream>
 #include <streambuf>
 #include <cstring>
 #include <memory>
@@ -28,7 +29,7 @@ public:
     const char *getTimeStamp() const;
     const char *getAnnotationText() const;
 private:
-    std::ostringstream output_buffer;
+    py::object output_cache;
     DISE::CxRITFileDecompressed decompressed_file = DISE::CxRITFileDecompressed(DISE::CxRITFile());
     unsigned long long output_length = -1;
     unsigned long long total_header_length = -1;
@@ -66,6 +67,8 @@ void xRITDecompress::decompress(const py::bytes& in_buffer) {
         std::cerr << "Opening/reading input file failed.\n";
     }
     decompressed_file = DISE::CxRITFileDecompressed(compressedFile);
+    output_cache = py::object();
+    output_length = -1;
     spectral_channel_ID = decompressed_file.GetSpectralChannelID().m_SC_CHAN_ID;
     segment_seq_no = decompressed_file.GetSegmentSeqNo();
     total_header_length = decompressed_file.GetTotalHeaderLength();
@@ -88,10 +91,14 @@ unsigned long long xRITDecompress::getOutputLength() const {
 }
 
 py::bytes xRITDecompress::data() {
-    decompressed_file.Write(output_buffer);
-    output_buffer.seekp(0, std::ios::end);
-    output_length = output_buffer.tellp();
-    return py::bytes(output_buffer.str());
+    if (!output_cache) {
+        std::ostringstream output_buffer;
+        decompressed_file.Write(output_buffer);
+        const auto output = output_buffer.str();
+        output_length = output.size();
+        output_cache = py::bytes(output);
+    }
+    return py::reinterpret_borrow<py::bytes>(output_cache);
 }
 
 unsigned long long xRITDecompress::getTotalHeaderLength() const {
