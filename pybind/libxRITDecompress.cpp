@@ -151,10 +151,12 @@ void xRITDecompress::decompress(const py::bytes& in_buffer) {
         } else if (!file_name.empty()) {
             compressedFile = DISE::CxRITFile(file_name);
         } else {
-            std::cerr << "Input file of buffer not specified.\n";
+            throw std::invalid_argument("Input file or buffer not specified.");
         }
+    } catch (const std::invalid_argument&) {
+        throw;
     } catch (...) {
-        std::cerr << "Opening/reading input file failed.\n";
+        throw std::runtime_error("Opening/reading input file failed.");
     }
     decompressed_file = DISE::CxRITFileDecompressed(compressedFile);
     output_cache = py::object();
