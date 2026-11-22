@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import argparse
+import sys
 
 import pyPublicDecompWT
 from pyPublicDecompWT import xRITDecompress
@@ -20,15 +21,24 @@ source_files = list(filter(None, [args.file] + args.files))
 if len(source_files) == 0:
     parser.error("No compressed HRIT/LRIT file(s) specified.")
 
+failed = []
 for fn in source_files:
     pt = Path(fn).resolve()
     if not pt.is_file():
         parser.error(f"Input file does not exist or is not a regular file: {fn}")
     xrit = xRITDecompress()
-    with open(pt, mode="rb") as fh:
-        xrit.decompress(fh.read())
+    try:
+        with open(pt, mode="rb") as fh:
+            xrit.decompress(fh.read())
+    except Exception as err:
+        print(f"{fn}: {err}", file=sys.stderr)
+        failed.append(fn)
+        continue
 
-    with open(pt.with_name(xrit.getAnnotationText()), mode="wb") as fh:
+    with open(Path.cwd() / xrit.getAnnotationText(), mode="wb") as fh:
         fh.write(xrit.data())
     if args.verbose:
         print(f"Decompressed file: {xrit.getAnnotationText()}")
+
+if failed:
+    sys.exit(f"Failed to decompress {len(failed)} of {len(source_files)} file(s).")
