@@ -2,6 +2,16 @@ cmake_minimum_required(VERSION 3.18...3.31)
 set(PROJNAME "PublicDecompWT")
 project(${PROJNAME} VERSION "2.8.1")
 
+# Keep temporary source directories out of __FILE__ and debug information.
+include(CheckCXXCompilerFlag)
+
+set(_file_prefix_map "-ffile-prefix-map=${PROJECT_SOURCE_DIR}/=./")
+check_cxx_compiler_flag("${_file_prefix_map}" HAS_FFILE_PREFIX_MAP)
+
+if(HAS_FFILE_PREFIX_MAP)
+    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:${_file_prefix_map}>")
+endif()
+
 # Add verbose compile output
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
