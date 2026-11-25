@@ -21,20 +21,6 @@ jobs:
       matrix:
         platform: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.11", "3.12", "3.13", "3.14", "3.x"]
-        include:
-          - platform: ubuntu-22.04
-            python-version: "3.7"
-          - platform: ubuntu-22.04
-            python-version: "3.8"
-          - platform: ubuntu-24.04
-            python-version: "3.9"
-          - platform: ubuntu-24.04
-            python-version: "3.10"
-          - platform: macos-15
-            python-version: "3.15"
-          - platform: windows-2022
-            python-version: "3.15"
-
 
     steps:
       - uses: actions/checkout@v6

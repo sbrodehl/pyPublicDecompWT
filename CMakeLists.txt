@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18...3.31)
+cmake_minimum_required(VERSION 4.2)
 set(PROJNAME "PublicDecompWT")
 project(${PROJNAME} VERSION "2.8.1")
 
