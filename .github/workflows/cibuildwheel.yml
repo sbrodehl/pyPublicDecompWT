@@ -4,6 +4,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
@@ -27,7 +30,7 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     outputs:
-      sha: ${{ steps.autotag.outputs.tagsha }}
+      version: ${{ steps.package_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -50,6 +53,8 @@ jobs:
         with:
           name: wheels
           path: ./dist/*tar.gz
+          if-no-files-found: error
+          overwrite: true
 
       - name: Check source distribution
         run: |
@@ -59,37 +64,11 @@ jobs:
           cd ${GITHUB_WORKSPACE}
 
       - name: Store package version
-        run: echo 'version='`pip show pyPublicDecompWT | grep "Version:" | cut -c 10-` > .package_version
-
-      - name: Autoadd release Tags
-        uses: sbrodehl/action-autotag@v3
-        id: autotag
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          source_file: ".package_version"
-          # this is the PEP 440 regex https://github.com/pypa/packaging/blob/21.3/packaging/version.py#L225
-          # with a capture group (around everything), but all other groups are non capturing
-          # double escape's where necessary
-          extraction_regex: "version\\s*=\\s*[\\'\"]*((\\d+!)?(\\d+)(\\.\\d+)*([\\.\\-\\_])?((a(lpha)?|b(eta)?|c|r(c|ev)?|pre(view)?)\\d*)?(\\.?(post|dev)\\d*)?)[\\'\"]*"
-          capture_group: 1
-          tag_message: "Release"
-          tag_format: "v{version}"
-
-      - name: Show version
-        if: steps.autotag.outputs.tagsha
-        run: echo ${{ steps.autotag.outputs.tagsha }}
-
-      - name: Publish to PyPI
-        if: ${{ steps.autotag.outputs.tagsha && inputs.deploy }}
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          skip-existing: true
-          user: __token__
-          password: ${{ secrets.PYPI_PASSWORD }}
+        id: package_version
+        run: echo 'version='`pip show pyPublicDecompWT | grep "Version:" | cut -c 10-` >> "$GITHUB_OUTPUT"
 
   testing:
     needs: [build_sdist]
-    if: ${{ needs.build_sdist.outputs.sha && inputs.deploy }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -108,7 +87,6 @@ jobs:
 
   build-wheels:
     needs: [build_sdist]
-    if: ${{ needs.build_sdist.outputs.sha && inputs.deploy }}
     name: Build wheels on ${{ matrix.os }} (${{ matrix.cibw_archs }})
     runs-on: ${{ matrix.os }}
     env:
@@ -159,22 +137,78 @@ jobs:
         with:
           name: wheels-${{ matrix.os }}-${{ matrix.cibw_archs }}
           path: ./dist/*.whl
+          if-no-files-found: error
+          overwrite: true
 
   deploy:
     name: Deploy to PyPI
     runs-on: ubuntu-latest
     needs: [build_sdist, build-wheels, testing]
-    if: ${{ needs.build_sdist.outputs.sha && inputs.deploy }}
+    if: ${{ inputs.deploy }}
+    permissions:
+      contents: write
+    env:
+      PACKAGE_VERSION: ${{ needs.build_sdist.outputs.version }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./dist/
           merge-multiple: true
 
-      - name: Publish to PyPI
+      - name: Separate source distribution and wheels
+        run: |
+          mkdir -p dist/sdist dist/wheels
+          mv dist/*.tar.gz dist/sdist/
+          mv dist/*.whl dist/wheels/
+
+      - name: Restore package version
+        run: printf 'version=%s\n' "$PACKAGE_VERSION" > .package_version
+
+      - name: Auto-add release Tags
+        uses: sbrodehl/action-autotag@v3
+        id: autotag
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source_file: ".package_version"
+          # this is the PEP 440 regex https://github.com/pypa/packaging/blob/21.3/packaging/version.py#L225
+          # with a capture group (around everything), but all other groups are non-capturing
+          # double escape's where necessary
+          extraction_regex: "version\\s*=\\s*[\\'\"]*((\\d+!)?(\\d+)(\\.\\d+)*([\\.\\-\\_])?((a(lpha)?|b(eta)?|c|r(c|ev)?|pre(view)?)\\d*)?(\\.?(post|dev)\\d*)?)[\\'\"]*"
+          capture_group: 1
+          tag_message: "Release"
+          tag_format: "v{version}"
+
+      - name: Show version
+        if: steps.autotag.outputs.tagsha
+        run: echo ${{ steps.autotag.outputs.tagsha }}
+
+      - name: Check release tag
+        id: release_tag
+        run: |
+          git fetch --no-tags origin "refs/tags/v${PACKAGE_VERSION}"
+          if [ "$(git rev-parse 'FETCH_HEAD^{commit}')" = "$GITHUB_SHA" ]; then
+            echo 'publish=true' >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Version ${PACKAGE_VERSION} is tagged at another commit; bump the version to publish these changes."
+          fi
+
+      - name: Publish source distribution to PyPI
+        if: ${{ steps.release_tag.outputs.publish == 'true' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          packages-dir: dist/sdist/
+          skip-existing: true
+          user: __token__
+          password: ${{ secrets.PYPI_PASSWORD }}
+
+      - name: Publish wheels to PyPI
+        if: ${{ steps.release_tag.outputs.publish == 'true' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/wheels/
           skip-existing: true
           user: __token__
           password: ${{ secrets.PYPI_PASSWORD }}
