@@ -37,7 +37,7 @@ for fn in source_files:
     try:
         pt = Path(fn).resolve()
         if not pt.is_file():
-            raise OSError(f"Input file does not exist or is not a regular file: {fn}")
+            raise OSError("Input file does not exist or is not a regular file")
         xrit = xRITDecompress()
         with open(pt, mode="rb") as fh:
             xrit.decompress(fh.read())
