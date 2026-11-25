@@ -32,9 +32,9 @@ jobs:
     outputs:
       version: ${{ steps.package_version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         name: Switch to using Python 3.x
         with:
           python-version: 3.x
@@ -49,7 +49,7 @@ jobs:
           python setup.py sdist
 
       - name: Store source distribution
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels
           path: ./dist/*tar.gz
@@ -71,11 +71,11 @@ jobs:
     needs: [build_sdist]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           lfs: 'true'
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: 3.x
 
@@ -99,12 +99,12 @@ jobs:
         cibw_archs: ["auto"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version:  3.x
 
@@ -113,19 +113,21 @@ jobs:
           python -m pip install cibuildwheel
 
       - name: Build wheels for Python 3.10+
-        run: |
-          python -m cibuildwheel --output-dir dist
+        uses: pypa/cibuildwheel@v4.3
+        with:
+          output-dir: dist
         env:
           CIBW_BUILD: "{c,p}p3*"
-          CIBW_SKIP: "{c,p}p3{6..9}-*"
+          CIBW_SKIP: "*_i686 *-win32 *-musllinux_* {c,p}p3{6..9}-*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_BEFORE_BUILD: python -m pip install -U pip setuptools wheel
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
 
       - name: Build wheels for Python 3.7 / 3.8 / 3.9
-        run: |
-          python -m cibuildwheel --output-dir dist
+        uses: pypa/cibuildwheel@v2.23.3
+        with:
+          output-dir: dist
         env:
           CIBW_BUILD: "{c,p}p37-* {c,p}p38-* {c,p}p39-*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
@@ -133,7 +135,7 @@ jobs:
           CIBW_BEFORE_BUILD: python -m pip install -U pip
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: wheels-${{ matrix.os }}-${{ matrix.cibw_archs }}
           path: ./dist/*.whl
@@ -150,10 +152,10 @@ jobs:
     env:
       PACKAGE_VERSION: ${{ needs.build_sdist.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: ./dist/
           merge-multiple: true
@@ -197,7 +199,7 @@ jobs:
 
       - name: Publish source distribution to PyPI
         if: ${{ steps.release_tag.outputs.publish == 'true' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@v1.14.3
         with:
           packages-dir: dist/sdist/
           skip-existing: true
@@ -206,7 +208,7 @@ jobs:
 
       - name: Publish wheels to PyPI
         if: ${{ steps.release_tag.outputs.publish == 'true' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@v1.14.3
         with:
           packages-dir: dist/wheels/
           skip-existing: true
