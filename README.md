@@ -10,7 +10,7 @@ Currently, only bindings for the tool `xRITDecompress` are available.
 If you need other classes or functionalities, please open a [pull-request][3]!
 
 This repository contains / mirrors the source code for the complete [PublicDecompWT][2] tool, as well.
-Additionally, we provide CMake build files.
+We use CMake build files, original makefiles are kept as reference.
 
 ## Installation
 
@@ -29,8 +29,10 @@ python -c "import pyPublicDecompWT"
 Building from sources requires C/C++, including compiler and standard library support.
 
 - C/C++ Compiler, e.g. GNU-GCC
-- `CMake` 3.18 or newer
+- `CMake`
 - `pybind11`
+
+Exact versions can be seen in [pyproject.toml](pyproject.toml).
 
 ## Usage
 
