@@ -65,9 +65,12 @@ Thus, the command line call has to be changed.
 
 In addition to the `-s` option we added a positional argument `files` to enable batch processing of (multiple) files in a single call.
 
+By default, the script writes decompressed files to the current working directory using the filename from the decompressed annotation.
+Use `--output DIR` to select another output directory.
+
 ```
 $ xRITDecompress --help
-usage: xRITDecompress [-h] [--version] [-v] [-s FILE] [files ...]
+usage: xRITDecompress [-h] [--version] [-v] [-s FILE] [--output DIR] [files ...]
 
 Command line tool for manual decompression of HRIT/LRIT files.
 
@@ -76,9 +79,10 @@ positional arguments:
 
 options:
   -h, --help     show this help message and exit
-  --version      show program`s version number and exit
+  --version      show program's version number and exit
   -v, --verbose  Verbose mode
   -s FILE        Name of compressed HRIT/LRIT file
+  --output DIR   Output directory (default: current working directory)
 ```
 
 ## Versioning Scheme

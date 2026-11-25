@@ -7,6 +7,7 @@ import sys
 import pyPublicDecompWT
 from pyPublicDecompWT import xRITDecompress
 
+
 parser = argparse.ArgumentParser(
     prog="xRITDecompress",
     description="Command line tool for manual decompression of HRIT/LRIT files.",
@@ -14,6 +15,10 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--version", action="version", version="%(prog)s {version}".format(version=pyPublicDecompWT.__version__))
 parser.add_argument("-v", "--verbose", help="Verbose mode", action="store_true")
 parser.add_argument("-s", dest="file", help="Name of compressed HRIT/LRIT file", type=str)
+parser.add_argument(
+    "--output", metavar="DIR", type=Path, default=Path.cwd(),
+    help="Output directory (default: current working directory)",
+)
 parser.add_argument("files", help="Name of compressed HRIT/LRIT file(s)", nargs='*', type=str)
 args = parser.parse_args()
 
@@ -21,24 +26,31 @@ source_files = list(filter(None, [args.file] + args.files))
 if len(source_files) == 0:
     parser.error("No compressed HRIT/LRIT file(s) specified.")
 
+try:
+    output_dir = args.output.resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+except (OSError, RuntimeError) as err:
+    parser.error(f"Cannot use output directory {args.output}: {err}")
+
 failed = []
 for fn in source_files:
-    pt = Path(fn).resolve()
-    if not pt.is_file():
-        parser.error(f"Input file does not exist or is not a regular file: {fn}")
-    xrit = xRITDecompress()
     try:
+        pt = Path(fn).resolve()
+        if not pt.is_file():
+            parser.error(f"Input file does not exist or is not a regular file: {fn}")
+        xrit = xRITDecompress()
         with open(pt, mode="rb") as fh:
             xrit.decompress(fh.read())
+
+        annotation = xrit.getAnnotationText()
+        data = xrit.data()
+        with open(output_dir / annotation, mode="wb") as fh:
+            fh.write(data)
+        if args.verbose:
+            print(f"Decompressed file: {annotation}")
     except Exception as err:
         print(f"{fn}: {err}", file=sys.stderr)
         failed.append(fn)
-        continue
-
-    with open(Path.cwd() / xrit.getAnnotationText(), mode="wb") as fh:
-        fh.write(xrit.data())
-    if args.verbose:
-        print(f"Decompressed file: {xrit.getAnnotationText()}")
 
 if failed:
     sys.exit(f"Failed to decompress {len(failed)} of {len(source_files)} file(s).")

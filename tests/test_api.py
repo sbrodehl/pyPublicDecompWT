@@ -107,3 +107,19 @@ def test_uncompressed_passthrough(path):
     assert xrit.data() == expected
     assert xrit.data() == expected
     assert xrit.getOutputLength() == len(expected)
+
+
+@pytest.mark.parametrize("arguments", [(), (b"",)], ids=["omitted", "empty"])
+def test_decompression_requires_input(arguments):
+    with pytest.raises(ValueError, match="Input file or buffer not specified"):
+        xRITDecompress().decompress(*arguments)
+
+
+def test_invalid_buffer_raises():
+    with pytest.raises(RuntimeError, match="Opening/reading input file failed"):
+        xRITDecompress().decompress(b"not an xRIT file")
+
+
+def test_missing_input_path_raises(tmp_path):
+    with pytest.raises(RuntimeError, match="Opening/reading input file failed"):
+        xRITDecompress(str(tmp_path / "missing-input"))
