@@ -53,6 +53,11 @@ with open(compressed_file_path, mode="rb") as fh:
     uncompressed = xRIT.data()
 ```
 
+`data()` and metadata getters raise `RuntimeError` until the decompression succeeds.
+Starting a new decode discards the previous result.
+If reading or decoding fails, the decoder remains empty until the next decode call succeeds.
+Previously returned `bytes` objects remain valid.
+
 ### `xRITDecompress`
 
 To comply with the original PublicDecompWT project, the pyPublicDecompWT package provides a [`xRITDecompress` executable](scripts/xRITDecompress) as well.
