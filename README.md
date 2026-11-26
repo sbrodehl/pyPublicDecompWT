@@ -60,6 +60,9 @@ Starting a new decode discards the previous result.
 If reading or decoding fails, the decoder remains empty until the next decode call succeeds.
 Previously returned `bytes` objects remain valid.
 
+`getTimeStamp()` returns the file timestamp in UTC as `YYYYMMDDHHMMSS`, independently of the host timezone.
+Subsecond precision is omitted from this string; serialized output preserves the timestamp's millisecond precision.
+
 ### `xRITDecompress`
 
 To comply with the original PublicDecompWT project, the pyPublicDecompWT package provides a [`xRITDecompress` executable](scripts/xRITDecompress) as well.

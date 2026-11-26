@@ -175,12 +175,17 @@ void xRITDecompress::decompress(const py::bytes& in_buffer) {
     segment_seq_no = decoded->GetSegmentSeqNo();
     total_header_length = decoded->GetTotalHeaderLength();
     file_type_code = decoded->GetFileTypeCode();
-    auto utctime(const_cast<SYSTIME &>(decoded->GetTimeStamp()));
-#ifdef WIN32
-    utctime_format = utctime.FormatDate("yyyyMMdd") + utctime.FormatTime("HHmmss");
-#else
-    utctime_format = utctime.Format("%Y%m%d%H%M%S");
-#endif
+    const NBO::TIME_CDS_SHORT cds_time(decoded->GetTimeStamp());
+    const auto datetime = py::module_::import("datetime");
+    const auto epoch = datetime.attr("datetime")(
+        1958, 1, 1,
+        py::arg("tzinfo") = datetime.attr("timezone").attr("utc")
+    );
+    const auto elapsed = datetime.attr("timedelta")(
+        py::arg("days") = static_cast<unsigned short>(cds_time.m_Day),
+        py::arg("milliseconds") = static_cast<unsigned long>(cds_time.m_MillisecondsOfDay)
+    );
+    utctime_format = (epoch + elapsed).attr("strftime")("%Y%m%d%H%M%S").cast<std::string>();
     file_annotation = decoded->GetAnnotation().GetText();
     decompressed_file = std::move(decoded);
 }
@@ -259,7 +264,7 @@ PYBIND11_MODULE(pyPublicDecompWT, m) {
             .def("getTotalHeaderLength", &xRITDecompress::getTotalHeaderLength, "Returns the accumulated length of all header records.")
             .def("getSpectralChannelID", &xRITDecompress::getSpectralChannelID, "Returns the SEVIRI spectral channel identifier.")
             .def("getSegmentSeqNo", &xRITDecompress::getSegmentSeqNo, "Returns the segment sequence number.")
-            .def("getTimeStamp", &xRITDecompress::getTimeStamp, "Returns the Time Stamp Header Record.")
+            .def("getTimeStamp", &xRITDecompress::getTimeStamp, "Returns the Time Stamp Header Record in UTC as YYYYMMDDHHMMSS.")
             .def("getFileTypeCode", &xRITDecompress::getFileTypeCode, "Returns the File Type Code Header Record.");
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
