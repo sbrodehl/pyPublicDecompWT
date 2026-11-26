@@ -113,10 +113,11 @@ public:
     const char *getTimeStamp() const;
     const char *getAnnotationText() const;
 private:
+    void require_decompressed() const;
     py::object output_cache;
-    DISE::CxRITFileDecompressed decompressed_file = DISE::CxRITFileDecompressed(DISE::CxRITFile());
-    unsigned long long output_length = -1;
-    unsigned long long total_header_length = -1;
+    std::unique_ptr<DISE::CxRITFileDecompressed> decompressed_file;
+    unsigned long long output_length = 0;
+    unsigned long long total_header_length = 0;
     int spectral_channel_ID = 0;
     int segment_seq_no = -1;
     int file_type_code = -1;
@@ -133,10 +134,19 @@ xRITDecompress::xRITDecompress(std::string file_path): file_name(std::move(file_
 }
 
 void xRITDecompress::to_file() {
-    decompressed_file.Write(file_annotation);
+    require_decompressed();
+    decompressed_file->Write(file_annotation);
+}
+
+void xRITDecompress::require_decompressed() const {
+    if (!decompressed_file) {
+        throw std::runtime_error("No decompressed result is available.");
+    }
 }
 
 void xRITDecompress::decompress(const py::bytes& in_buffer) {
+    output_cache = py::object();
+    decompressed_file.reset();
     DISE::CxRITFile compressedFile;
     char *input_data;
     Py_ssize_t input_size;
@@ -158,33 +168,36 @@ void xRITDecompress::decompress(const py::bytes& in_buffer) {
     } catch (...) {
         throw std::runtime_error("Opening/reading input file failed.");
     }
-    decompressed_file = DISE::CxRITFileDecompressed(compressedFile);
-    output_cache = py::object();
+    auto decoded = std::make_unique<DISE::CxRITFileDecompressed>(compressedFile);
     output_length = -1;
-    spectral_channel_ID = decompressed_file.GetSpectralChannelID().m_SC_CHAN_ID;
-    segment_seq_no = decompressed_file.GetSegmentSeqNo();
-    total_header_length = decompressed_file.GetTotalHeaderLength();
-    file_type_code = decompressed_file.GetFileTypeCode();
-    auto utctime(const_cast<SYSTIME &>(decompressed_file.GetTimeStamp()));
+    spectral_channel_ID = decoded->GetSpectralChannelID().m_SC_CHAN_ID;
+    segment_seq_no = decoded->GetSegmentSeqNo();
+    total_header_length = decoded->GetTotalHeaderLength();
+    file_type_code = decoded->GetFileTypeCode();
+    auto utctime(const_cast<SYSTIME &>(decoded->GetTimeStamp()));
 #ifdef WIN32
     utctime_format = utctime.FormatDate("yyyyMMdd") + utctime.FormatTime("HHmmss");
 #else
     utctime_format = utctime.Format("%Y%m%d%H%M%S");
 #endif
-    file_annotation = decompressed_file.GetAnnotation().GetText();
+    file_annotation = decoded->GetAnnotation().GetText();
+    decompressed_file = std::move(decoded);
 }
 
 const char *xRITDecompress::getAnnotationText() const {
+    require_decompressed();
     return file_annotation.c_str();
 }
 
 unsigned long long xRITDecompress::getOutputLength() const {
+    require_decompressed();
     return output_length;
 }
 
 py::bytes xRITDecompress::data() {
+    require_decompressed();
     if (!output_cache) {
-        const auto bits = decompressed_file.GetTotalLength();
+        const auto bits = decompressed_file->GetTotalLength();
         const auto size = bits / 8 + (bits % 8 != 0);
         if (size > static_cast<unsigned long long>((std::numeric_limits<Py_ssize_t>::max)())) {
             throw std::overflow_error("Decompressed output is too large for Python bytes.");
@@ -194,7 +207,7 @@ py::bytes xRITDecompress::data() {
         {
             OutputBuffer output_buffer(output.data(), static_cast<std::size_t>(size));
             std::ostream out_stream(&output_buffer);
-            decompressed_file.Write(out_stream);
+            decompressed_file->Write(out_stream);
             if (!out_stream || output_buffer.size() != size) {
                 throw std::runtime_error("Serialized output length does not match the file headers.");
             }
@@ -207,22 +220,27 @@ py::bytes xRITDecompress::data() {
 }
 
 unsigned long long xRITDecompress::getTotalHeaderLength() const {
+    require_decompressed();
     return total_header_length;
 }
 
 int xRITDecompress::getSpectralChannelID() const {
+    require_decompressed();
     return spectral_channel_ID;
 }
 
 int xRITDecompress::getSegmentSeqNo() const {
+    require_decompressed();
     return segment_seq_no;
 }
 
 const char *xRITDecompress::getTimeStamp() const {
+    require_decompressed();
     return utctime_format.c_str();
 }
 
 int xRITDecompress::getFileTypeCode() const {
+    require_decompressed();
     return file_type_code;
 }
 
