@@ -151,13 +151,31 @@ from pathlib import Path
 from pyPublicDecompWT import xRITDecompress
 if hasattr(time, "tzset"):
     time.tzset()
+
+def timestamp_bytes(data):
+    offset = 0
+    while offset < int.from_bytes(data[4:8], "big"):
+        size = int.from_bytes(data[offset + 1:offset + 3], "big")
+        if data[offset] == 5:
+            return data[offset + 4:offset + 10]
+        offset += size
+    return None
+
 for path, expected in json.loads(sys.argv[1]):
     source = Path(path).read_bytes()
     decoder = xRITDecompress()
     decoder.decompress(source)
     assert decoder.getTimeStamp() == expected, (os.environ["TZ"], expected, decoder.getTimeStamp())
     offset = int(sys.argv[2])
-    assert decoder.data()[offset + 4:offset + 10] == source[offset + 4:offset + 10]
+    expected_bytes = source[offset + 4:offset + 10]
+    actual_bytes = timestamp_bytes(decoder.data())
+    context = (os.environ["TZ"], expected, expected_bytes.hex(), actual_bytes)
+    if actual_bytes is None:
+        # The upstream Windows writer treats the CDS epoch as its unset value
+        # and omits that optional record (GetHeaderRecordSequence in DISE).
+        assert sys.platform == "win32" and expected_bytes == bytes(6), context
+    else:
+        assert actual_bytes == expected_bytes, context
 assert os.environ["TZ"] == sys.argv[3]
 """
     result = subprocess.run(
