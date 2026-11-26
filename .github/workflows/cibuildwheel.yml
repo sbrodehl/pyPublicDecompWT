@@ -104,7 +104,7 @@ jobs:
           output-dir: dist
         env:
           CIBW_BUILD: "{c,p}p3*"
-          CIBW_SKIP: "*_i686 *-win32 *-musllinux_* {c,p}p3{6..10}-*"
+          CIBW_SKIP: "*_i686 *-win32 *-musllinux_* {c,p}p3{6..10}-* cp3??t-*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ARCHS_MACOS: "x86_64 arm64"
