@@ -53,6 +53,8 @@ with open(compressed_file_path, mode="rb") as fh:
     uncompressed = xRIT.data()
 ```
 
+After successful decompression, `getOutputLength()` returns the serialized  output size in bytes, including headers.
+
 `data()` and metadata getters raise `RuntimeError` until the decompression succeeds.
 Starting a new decode discards the previous result.
 If reading or decoding fails, the decoder remains empty until the next decode call succeeds.
