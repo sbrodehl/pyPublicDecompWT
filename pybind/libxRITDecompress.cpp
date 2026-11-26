@@ -169,7 +169,8 @@ void xRITDecompress::decompress(const py::bytes& in_buffer) {
         throw std::runtime_error("Opening/reading input file failed.");
     }
     auto decoded = std::make_unique<DISE::CxRITFileDecompressed>(compressedFile);
-    output_length = -1;
+    const auto bits = decoded->GetTotalLength();
+    output_length = bits / 8 + (bits % 8 != 0);
     spectral_channel_ID = decoded->GetSpectralChannelID().m_SC_CHAN_ID;
     segment_seq_no = decoded->GetSegmentSeqNo();
     total_header_length = decoded->GetTotalHeaderLength();
@@ -197,8 +198,7 @@ unsigned long long xRITDecompress::getOutputLength() const {
 py::bytes xRITDecompress::data() {
     require_decompressed();
     if (!output_cache) {
-        const auto bits = decompressed_file->GetTotalLength();
-        const auto size = bits / 8 + (bits % 8 != 0);
+        const auto size = output_length;
         if (size > static_cast<unsigned long long>((std::numeric_limits<Py_ssize_t>::max)())) {
             throw std::overflow_error("Decompressed output is too large for Python bytes.");
         }
@@ -213,7 +213,6 @@ py::bytes xRITDecompress::data() {
             }
         }
         auto result = output.finish();
-        output_length = size;
         output_cache = std::move(result);
     }
     return py::reinterpret_borrow<py::bytes>(output_cache);
@@ -254,7 +253,7 @@ PYBIND11_MODULE(pyPublicDecompWT, m) {
     py::class_<xRITDecompress>(m, "xRITDecompress", py::dynamic_attr())
             .def(py::init<std::string&>(), "", pybind11::arg("file_path") = "")
             .def("getAnnotationText", &xRITDecompress::getAnnotationText, "Returns the complete Annotation Header Record.")
-            .def("getOutputLength", &xRITDecompress::getOutputLength, "Returns the length of the decompressed output.")
+            .def("getOutputLength", &xRITDecompress::getOutputLength, "Returns the serialized output length in bytes, including headers.")
             .def("decompress", &xRITDecompress::decompress, "Decompresses file or given buffer.", pybind11::arg("in_buffer") = py::bytes())
             .def("data", &xRITDecompress::data, "Returns the decompressed output.")
             .def("getTotalHeaderLength", &xRITDecompress::getTotalHeaderLength, "Returns the accumulated length of all header records.")
