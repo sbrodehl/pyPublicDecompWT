@@ -7,13 +7,15 @@ import runpy
 import shutil
 import subprocess
 import sys
+import sysconfig
 
 import pytest
 import pyPublicDecompWT
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "xRITDecompress"
+# Exercise the installed script shipped in the wheel.
+SCRIPT = Path(sysconfig.get_path("scripts")) / "xRITDecompress"
 COMPRESSED = sorted((ROOT / "test-data" / "compressed_ref").glob("*-C_"))
 
 
